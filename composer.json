@@ -19,28 +19,11 @@
             "php": "7.1"
         }
     },
-    "repositories": {
-        "haijin/testing": {
-            "type": "path",
-            "url": "../php-testing",
-            "options": {
-            "symlink": true
-            }
-        },
-        "haijin/tools": {
-            "type": "path",
-            "url": "../php-tools",
-            "options": {
-            "symlink": true
-            }
-        }
-    },
     "require": {
         "haijin/tools": "^0.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.4",
-        "phpdocumentor/phpdocumentor": "2.*",
         "haijin/testing": "^0.0.1"
     },
     "autoload": {
@@ -54,7 +37,6 @@
         }
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit tests/ --bootstrap vendor/autoload.php",
-        "document": "./vendor/bin/phpdoc -d src/ -t documentation/api"
+        "test": "./vendor/bin/phpunit tests/ --bootstrap vendor/autoload.php"
     }
 }

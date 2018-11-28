@@ -2,6 +2,11 @@
 
 Framework to easily validate objects and attributes using a simple and expressive DSL.
 
+[![Latest Stable Version](https://poser.pugx.org/haijin/validations/version)](https://packagist.org/packages/haijin/validations)
+[![Latest Unstable Version](https://poser.pugx.org/haijin/validations/v/unstable)](https://packagist.org/packages/haijin/validations)
+[![Build Status](https://travis-ci.com/haijin-development/php-validations.svg?branch=v0.0.2)](https://travis-ci.com/haijin-development/php-validations)
+[![License](https://poser.pugx.org/haijin/validations/license)](https://packagist.org/packages/haijin/validations)
+
 ### Version 0.0.1
 
 This library is under active development and no stable version was released yet.
