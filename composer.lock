@@ -15,14 +15,13 @@
                 "reference": "9a17825b7608f2dacb6754b0d8df94c8ea904f69"
             },
             "dist": {
-                "type": "path",
+                "type": "zip",
                 "url": "https://api.github.com/repos/haijin-development/php-tools/zipball/9a17825b7608f2dacb6754b0d8df94c8ea904f69",
                 "reference": "9a17825b7608f2dacb6754b0d8df94c8ea904f69",
-                "shasum": null
+                "shasum": ""
             },
             "require-dev": {
                 "haijin/testing": "^0.0.1",
-                "phpdocumentor/phpdocumentor": "2.*",
                 "phpunit/phpunit": "^7.4"
             },
             "type": "library",
@@ -35,14 +34,7 @@
                     ]
                 }
             },
-            "scripts": {
-                "test": [
-                    "./vendor/bin/phpunit tests/ --bootstrap vendor/autoload.php"
-                ],
-                "document": [
-                    "./vendor/bin/phpdoc -d src/ -t documentation/api"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -57,14 +49,11 @@
             "description": "Common tools to use in PHP applications.",
             "homepage": "https://github.com/haijin-development/php-tools",
             "keywords": [
-                "metaprogramming",
+                "collections",
                 "path",
-                "reflection",
                 "utilities"
             ],
-            "transport-options": {
-                "symlink": true
-            }
+            "time": "2018-11-27T23:52:10+00:00"
         }
     ],
     "packages-dev": [
@@ -125,14 +114,18 @@
         {
             "name": "haijin/testing",
             "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/haijin-development/php-testing.git",
+                "reference": "1d931c0b68fcff9bf22e8632d811ffd123740af4"
+            },
             "dist": {
-                "type": "path",
-                "url": "../php-testing",
-                "reference": "24de5dc4c2edacd7c39484293c5ad624994b6ca4",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/haijin-development/php-testing/zipball/1d931c0b68fcff9bf22e8632d811ffd123740af4",
+                "reference": "1d931c0b68fcff9bf22e8632d811ffd123740af4",
+                "shasum": ""
             },
             "require-dev": {
-                "phpdocumentor/phpdocumentor": "2.*",
                 "phpunit/phpunit": "^7.4"
             },
             "type": "library",
@@ -141,14 +134,7 @@
                     "Haijin\\Testing\\": "src/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "./vendor/bin/phpunit tests/ --bootstrap vendor/autoload.php"
-                ],
-                "document": [
-                    "./vendor/bin/phpdoc -d src/ -t documentation/api"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -163,14 +149,12 @@
             "description": "Extensions to PHPUnit to ease testing and improve tests expressiveness.",
             "homepage": "https://github.com/haijin-development/php-testing",
             "keywords": [
-                "PHPUnit",
                 "assertions",
                 "expectations",
+                "phpunit",
                 "testing"
             ],
-            "transport-options": {
-                "symlink": true
-            }
+            "time": "2018-11-27T22:29:40+00:00"
         },
         {
             "name": "myclabs/deep-copy",
