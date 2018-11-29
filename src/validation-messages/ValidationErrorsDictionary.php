@@ -156,6 +156,24 @@ class ValidationErrorsDictionary
     }
 
     /**
+     * Evaluates the $definition_closure defined in the $file_path.
+     *
+     * @param string|FilePath $file_path The file with the definition closure.
+     *
+     * @return AssetsLibrary Returns $this object.
+     */
+    public function define_in_file($file_path)
+    {
+        if( is_string( $file_path ) ) {
+            $file_path = new \Haijin\Tools\FilePath( $file_path );
+        }
+
+        return $this->define( function($messages) use($file_path) {
+            require( $file_path->to_string() );
+        });
+    }
+
+    /**
      * Temporary sets $this->binding to a given binding, evaluates a closure and restores the original binding.
      *
      * @param object $bindig An object that will be bound to the '$this' variable when evaluating each message formatter.
