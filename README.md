@@ -33,7 +33,6 @@ If you like it a lot you may contribute by financing its development. Please con
     2. [Define a default validation message](#c-7-2)
     3. [Define more specific messages](#c-7-3)
 8. [Running the tests](#c-8)
-9. [Generating the api documentation](#c-9)
 
 <a name="c-1"></a>
 ## Installation
@@ -673,11 +672,4 @@ foreach( $validation_errors as $error ) {
 
 ```
 composer test
-```
-
-<a name="c-9"></a>
-## Generating the api documentation
-
-```
-composer document
 ```
