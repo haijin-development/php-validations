@@ -139,8 +139,10 @@ class ValidationErrorsDictionary
     /**
      * Defines the formatters for ValidationErrors using a DSL.
      *
-     * @param closure $definition_closure A closure using the DSL to define the formatting of the ValidationsError messages.
-     * @param object $bindig An object that will be bound to the '$this' variable when evaluating each message formatter.
+     * @param closure $definition_closure A closure using the DSL to define the formatting of
+     *      the ValidationsError messages.
+     * @param object $bindig An object that will be bound to the '$this' variable when evaluating
+     *      each message formatter.
      *
      * @return ValidationErrorsDictionary Returns $this instance.
      */
