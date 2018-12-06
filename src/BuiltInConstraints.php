@@ -18,7 +18,7 @@ trait BuiltInConstraints
     {
         $this->set_validation_name( 'is_present' );
 
-        if( $this->get_value() == null ) {
+        if( $this->get_value() === null ) {
             $this->add_error();
             $this->halt();            
         }
@@ -35,7 +35,7 @@ trait BuiltInConstraints
     {
         $this->set_validation_name( 'not_present' );
 
-        if( $this->get_value() != null ) {
+        if( $this->get_value() !== null ) {
             $this->add_error();
         }
 
@@ -51,7 +51,7 @@ trait BuiltInConstraints
     {
         $this->set_validation_name( 'is_optional' );
 
-        if( $this->get_value() == null ) {
+        if( $this->get_value() === null ) {
             $this->halt();
         }
 
@@ -579,7 +579,7 @@ trait BuiltInConstraints
      */
     public function validate_with_callable($custom_validation_callable, $this_binding = null)
     {
-        if( $this_binding == null ) $this_binding = $this;
+        if( $this_binding === null ) $this_binding = $this;
 
         $custom_validation_callable->call( $this_binding, $this );
 

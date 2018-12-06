@@ -23,7 +23,7 @@ class ValidationMessageNotFoundException extends ValidationsException
     {
         $this->validation_error = $validation_error;
 
-        if( $error_message == null )
+        if( $error_message === null )
             $error_message = $this->default_error_message();
 
         parent::__construct( $error_message );

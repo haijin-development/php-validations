@@ -148,7 +148,7 @@ class ValidationErrorsDictionary
      */
     public function define($definition_closure, $binding = null)
     {
-        if( $binding == null ) {
+        if( $binding === null ) {
             $binding = $this->binding;
         }
 
@@ -275,7 +275,7 @@ class ValidationErrorsDictionary
      */
     public function has_default()
     {
-        return $this->default_message_formatter != null;
+        return $this->default_message_formatter !== null;
     }
 
     /**
@@ -299,7 +299,7 @@ class ValidationErrorsDictionary
      */
     public function has_message_for($validation_error)
     {
-        if( $this->default_message_formatter != null ) {
+        if( $this->default_message_formatter !== null ) {
             return true;
         }
 

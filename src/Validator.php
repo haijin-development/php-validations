@@ -177,7 +177,7 @@ class Validator implements \ArrayAccess
      */
     public function validate($value, $validation_closure, $binding = null)
     {
-        if( $binding == null ) {
+        if( $binding === null ) {
             $binding = $this->binding;
         }
 
@@ -214,7 +214,7 @@ class Validator implements \ArrayAccess
         $nested_validation->set_binding( $this->binding );
         $nested_validation->set_errors_collection( $this->errors_collection );
 
-        if( $validation_closure != null )
+        if( $validation_closure !== null )
             $nested_validation->_isolate( $validation_closure );
 
         return $nested_validation;

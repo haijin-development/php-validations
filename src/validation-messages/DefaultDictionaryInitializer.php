@@ -97,11 +97,11 @@ class DefaultDictionaryInitializer
             $messages->at_validation( 'length', function($validation_error) {
                 $params = $validation_error->get_validation_parameters();
 
-                if( $params[0] != null && $params[1] != null ){
+                if( $params[0] !== null && $params[1] !== null ){
                     $length = "a length between {$params[0]} and {$params[1]}";
-                } elseif( $params[0] != null ) {
+                } elseif( $params[0] !== null ) {
                     $length = "a minimum length of {$params[0]}";
-                } elseif( $params[1] != null ) {
+                } elseif( $params[1] !== null ) {
                     $length = "a maximum length of {$params[1]}";
                 }
 
