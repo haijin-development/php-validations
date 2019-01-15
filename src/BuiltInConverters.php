@@ -12,9 +12,9 @@ trait BuiltInConverters
      *
      * @return Validator $this object
      */
-    public function to_string()
+    public function as_string()
     {
-        $this->set_validation_name( 'to_string' );
+        $this->set_validation_name( 'as_string' );
 
         $this->set_value( (string) $this->get_value() );
     }

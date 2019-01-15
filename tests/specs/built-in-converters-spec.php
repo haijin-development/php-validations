@@ -1,31 +1,25 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Validations\Validator;
 
-/**
- * Tests the use of the built converters in validations.
- */
-class BuiltInConvertersTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "When using the built-in validation converters", function() {
 
-    public function testAsString()
-    {
+    $this->it( "as_string passes", function() {
+
         $object = 123;
 
         $validator = new Validator();
 
         $validation_errors = $validator->validate( $object, function($obj) {
-            $obj->to_string();
+            $obj->as_string();
         });
 
-        $this->assertSame( $validator->get_value(), "123" );
-    }
+        $this->expect( $validator->get_value() ) ->to() ->be( "===" ) ->than( "123" );
 
-    public function testAsInteger()
-    {
+    });
+
+    $this->it( "as_int passes", function() {
+
         $object = "123";
 
         $validator = new Validator();
@@ -34,11 +28,12 @@ class BuiltInConvertersTest extends TestCase
             $obj->as_int();
         });
 
-        $this->assertSame( $validator->get_value(), 123 );
-    }
+        $this->expect( $validator->get_value() ) ->to() ->be( "===" ) ->than( 123 );
 
-    public function testAsFloat()
-    {
+    });
+
+    $this->it( "as_float passes", function() {
+
         $object = "1.00";
 
         $validator = new Validator();
@@ -47,11 +42,12 @@ class BuiltInConvertersTest extends TestCase
             $obj->as_float();
         });
 
-        $this->assertSame( $validator->get_value(), 1.00 );
-    }
+        $this->expect( $validator->get_value() ) ->to() ->be( "===" ) ->than( 1.00 );
 
-    public function testAsBoolean()
-    {
+    });
+
+    $this->it( "as_boolean passes", function() {
+
         $object = "true";
 
         $validator = new Validator();
@@ -60,6 +56,8 @@ class BuiltInConvertersTest extends TestCase
             $obj->as_boolean();
         });
 
-        $this->assertSame( $validator->get_value(), true );
-    }
-}
+        $this->expect( $validator->get_value() ) ->to() ->be( "===" ) ->than( true );
+
+    });
+
+});

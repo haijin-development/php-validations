@@ -1,18 +1,16 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Validations\Validator;
 
-/**
- * Tests the use of nested attributes in validations of objects and associative arrays.
- */
-class NestedAttributesTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "When validating nested attributes in validations of associative arrays", function() {
 
-    public function testNestedAttributesPasses()
-    {
+    $this->def( "increment_called_counter", function() {
+
+        $this->called_counter += 1 ;
+    });
+
+    $this->it( "nested attributes passes", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -35,11 +33,12 @@ class NestedAttributesTest extends TestCase
             });
         });
 
-        $this->assertEquals( $validation_errors, [] );
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
-    public function testNestedAttributesFails()
-    {
+    });
+
+    $this->it( "nested attributes fails", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -62,17 +61,19 @@ class NestedAttributesTest extends TestCase
             });
         });
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'is_string',
-            'validation_parameters' => []
-        ]);
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
-    public function testThisBindingIsKeptAcrossNestedAttributeValidations()
-    {
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'is_string',
+            'get_validation_parameters()' => []
+        ]);
+
+    });
+
+    $this->it( "this binding is kept across nested attribute validations", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -103,11 +104,12 @@ class NestedAttributesTest extends TestCase
             });
         }, $this);
 
-        $this->assertEquals( 3, $this->called_counter );
-    }
+        $this->expect( $this->called_counter ) ->to() ->equal( 3 );
 
-    public function testNestedAttributeHaltsItsChildAttributes()
-    {
+    });
+
+    $this->it( "nested attribute halts its child attributes", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -140,11 +142,12 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 2, $this->called_counter );
-    }
+        $this->expect( $this->called_counter ) ->to() ->equal( 2 );
 
-    public function testSiblingBranchesAreValidatedEvenWhenABranchFails()
-    {
+    });
+
+    $this->it( "sibling branches are validated even when a branch fails", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => null,
@@ -181,19 +184,21 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 3, $this->called_counter );
+        $this->expect( $this->called_counter ) ->to() ->equal( 3 );
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => null,
-            'attribute_path' => 'last_name',
-            'validation_name' => 'is_present',
-            'validation_parameters' => []
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
+
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => null,
+            'get_attribute_path()' => 'last_name',
+            'get_validation_name()' => 'is_present',
+            'get_validation_parameters()' => []
         ]);
-    }
 
-    public function testNestedAttributesWithNoClosuresProvidedPasses()
-    {
+    });
+
+    $this->it( "nested attributes with no closures provided passes", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -220,11 +225,12 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 0, count( $validation_errors ) );
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
-    public function testNestedAttributesUsingArrayAccessPasses()
-    {
+    });
+
+    $this->it( "nested attributes using array access passes", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -251,11 +257,12 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 0, count( $validation_errors ) );
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
-    public function testNestedAttributesWithNoClosuresProvidedFails()
-    {
+    });
+
+    $this->it( "nested attributes with no closures provided fails", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -282,17 +289,19 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => null,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'is_present',
-            'validation_parameters' => []
-        ]);
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
-    public function testNestedAttributesWithArrayAccessFails()
-    {
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => null,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'is_present',
+            'get_validation_parameters()' => []
+        ]);
+
+    });
+
+    $this->it( "nested attributes with array access fails", function() {
+
         $user = [
             'name' => 'Lisa',
             'last_name' => 'Simpson',
@@ -319,17 +328,15 @@ class NestedAttributesTest extends TestCase
 
         }, $this);
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => null,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'is_present',
-            'validation_parameters' => []
-        ]);
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
-    public function increment_called_counter()
-    {
-        $this->called_counter += 1 ;
-    }
-}
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => null,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'is_present',
+            'get_validation_parameters()' => []
+        ]);
+
+    });
+
+});

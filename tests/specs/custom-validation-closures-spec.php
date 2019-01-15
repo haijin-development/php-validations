@@ -1,18 +1,11 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Validations\Validator;
 
-/**
- * Tests the use of custom closures to perform validations.
- */
-class CustomValidationClosuresTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "When using custom closures to perform validations", function() {
 
-    public function testValidationBlockPasses()
-    {
+    $this->it( "validation closure passes", function() {
+
         $object = [
             'price_1' => 3,
             'price_2' => 4,
@@ -36,11 +29,12 @@ class CustomValidationClosuresTest extends TestCase
 
         });
 
-        $this->assertEquals( $validation_errors, [] );
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
-    public function testValidationBlockFails()
-    {
+    });
+
+    $this->it( "validation closure fails", function() {
+
         $object = [
             'price_1' => 3,
             'price_2' => 4,
@@ -62,12 +56,15 @@ class CustomValidationClosuresTest extends TestCase
             });
         });
 
-        $this->assertEquals( 1, count($validation_errors) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => $object,
-            'attribute_path' => '',
-            'validation_name' => 'invalid-total',
-            'validation_parameters' => []
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
+
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => $object,
+            'get_attribute_path()' => '',
+            'get_validation_name()' => 'invalid-total',
+            'get_validation_parameters()' => []
         ]);
-    }
-}
+
+    });
+
+});

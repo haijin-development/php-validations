@@ -159,7 +159,7 @@ $validation_errors = $validator->validate( $n, function($n) {
 
         if( $this->get_value() % 2 == 0 ){
             $validator->add_error();            
-        }            
+        }         
     });
 });
 

@@ -1,133 +1,154 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Tools\AttributePath;
 use Haijin\Validations\ValidationError;
 use Haijin\Validations\ValidationErrorsDictionary;
 
-/**
- * Tests the default validation errors messages.
- */
-class ValidationErrorsDictionaryTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "A ValidationErrorsDictionary", function() {
 
-    public function setUp()
-    {
-        parent::setUp();
+    $this->let( "dictionary", function() {
 
-        $this->dictionary = new ValidationErrorsDictionary();
-    }
+        return new ValidationErrorsDictionary();
 
-    public function testRaisesAnErrorIfNoMessageIsFound()
-    {
+    });
+
+    $this->it( "RaisesAnErrorIfNoMessageIsFound", function() {
+
         $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
 
-        $this->expectExactExceptionRaised(
-            'Haijin\Validations\ValidationMessageNotFoundException',
-            function() use($validation_error) {
-                $this->dictionary->message_for( $validation_error );
-            },
-            function($error) use($validation_error) {
-                $this->assertSame( $validation_error, $error->get_validation_error() );
-                $this->assertEquals( 'No message formatter was found for the ValidationError "length"', $error->getMessage() );
-            }
-        );
-    }
+        $this->expect( function() use($validation_error) {
 
-    public function testDefaultMessage()
-    {
+            $this->dictionary->message_for( $validation_error );
+
+        }) ->to() ->raise(
+            'Haijin\Validations\ValidationMessageNotFoundException',
+            function($error) use($validation_error) {
+
+                $this->expect( $error->get_validation_error() ) ->to() ->be( "===" )
+                    ->than( $validation_error );
+
+                $this->expect( $error->getMessage() ) ->to()
+                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+
+        });
+
+    });
+
+    $this->it( "DefaultMessage", function() {
+
         $this->dictionary->define( function() {
+
             $this->default( function($validation_error) {
                 return "Invalid value";
             });
+
         });
 
         $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+
         $message = $this->dictionary->message_for( $validation_error );
 
-        $this->assertEquals( "Invalid value", $message );
-    }
+        $this->expect( $message  ) ->to() ->equal( "Invalid value" );
 
-    public function testDroppingDefaultMessage()
-    {
+    });
+
+    $this->it( "DroppingDefaultMessage", function() {
+
         $this->dictionary->define( function() {
+
             $this->default( function($validation_error) {
                 return "Invalid value";
             });
+
         });
 
         $this->dictionary->drop_default();
 
-        $this->expectExactExceptionRaised(
-            'Haijin\Validations\ValidationMessageNotFoundException',
-            function() {
-                $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
-                $this->dictionary->message_for( $validation_error );
-            },
-            function($error) {
-                $this->assertEquals( 'No message formatter was found for the ValidationError "length"', $error->getMessage() );
-            }
-        );
-    }
+        $this->expect( function() {
 
-    public function testHasDefaultMessage()
-    {
-        $this->assertEquals( false, $this->dictionary->has_default() );
+            $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+
+            $this->dictionary->message_for( $validation_error );
+
+        }) ->to() ->raise(
+            'Haijin\Validations\ValidationMessageNotFoundException',
+            function($error) {
+
+                $this->expect( $error->getMessage() ) ->to()
+                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+        });
+
+    });
+
+    $this->it( "HasDefaultMessage", function() {
+
+        $this->expect( $this->dictionary->has_default() ) ->to() ->be() ->false();
 
         $this->dictionary->default( function($validation_error) {
             return "Invalid value";
         });
 
-        $this->assertEquals( true, $this->dictionary->has_default() );
+        $this->expect( $this->dictionary->has_default() ) ->to() ->be() ->true();
 
         $this->dictionary->drop_default();
 
-        $this->assertEquals( false, $this->dictionary->has_default() );
-    }
+        $this->expect( $this->dictionary->has_default() ) ->to() ->be() ->false();
 
-    public function testValidationMessage()
-    {
+    });
+
+    $this->it( "ValidationMessage", function() {
+
         $this->dictionary->define( function() {
+
             $this->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
+
         });
 
         $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+
         $message = $this->dictionary->message_for( $validation_error );
 
-        $this->assertEquals( "Invalid length", $message );
-    }
+        $this->expect( $message  ) ->to() ->equal( "Invalid length" );
 
-    public function testDroppingValidationMessage()
-    {
+    });
+
+    $this->it( "DroppingValidationMessage", function() {
+
         $this->dictionary->define( function() {
+
             $this->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
+
         });
 
         $this->dictionary->define( function() {
             $this->drop_validation( "length" );
         });
 
-        $this->expectExactExceptionRaised(
-            'Haijin\Validations\ValidationMessageNotFoundException',
-            function() {
-                $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
-                $this->dictionary->message_for( $validation_error );
-            },
-            function($error) {
-                $this->assertEquals( 'No message formatter was found for the ValidationError "length"', $error->getMessage() );
-            }
-        );
-    }
+        $this->expect( function() {
 
-    public function testValidationMessageOverridesDefaultMessage()
-    {
+            $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+
+            $this->dictionary->message_for( $validation_error );
+
+        }) ->to() ->raise(
+            'Haijin\Validations\ValidationMessageNotFoundException',
+            function($error) {
+
+                $this->expect( $error->getMessage() ) ->to()
+                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+
+        });
+
+    });
+
+    $this->it( "ValidationMessageOverridesDefaultMessage", function() {
+
         $this->dictionary->define( function() {
+
             $this->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
@@ -135,11 +156,15 @@ class ValidationErrorsDictionaryTest extends TestCase
             $this->default( function($validation_error) {
                 return "Invalid value";
             });
+
         });
 
         $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+
         $message = $this->dictionary->message_for( $validation_error );
 
-        $this->assertEquals( "Invalid length", $message );
-    }
-}
+        $this->expect( $message  ) ->to() ->equal( "Invalid length" );
+
+    });
+
+});

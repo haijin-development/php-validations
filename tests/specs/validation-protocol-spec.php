@@ -1,39 +1,31 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Validations\Validator;
 use Haijin\Validations\ValidationErrorException;
 
-/**
- * Tests the protocol of the Validator object.
- */
-class ValidationProtocolTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "When using the Validator protocol", function() {
 
-    // Testing accessors
+    $this->it( "accessing the validated value", function() {
 
-    public function testAccessingTheValidatedValue()
-    {
         $validator = new Validator( null );
         $validator->set_value( 123 );
 
-        $this->assertEquals( 123, $validator->get_value() );
-    }
+        $this->expect( $validator->get_value() ) ->to() ->equal( 123 );
 
-    public function testAccessingTheAttributePath()
-    {
+    });
+
+    $this->it( "accessing the attribute path", function() {
+
         $validator = new Validator( 123 );
         $validator->set_attribute_path( 'address.street' );
 
-        $this->assertEquals( 'address.street', $validator->get_attribute_path()->to_string() );
-    }
+        $this->expect( $validator->get_attribute_path()->to_string() ) ->to()
+            ->equal( 'address.street' );
 
-    // Test adding validation errors
+    });
 
-    public function testCreatingValidationErrors()
-    {
+    $this->it( "creating validation errors", function() {
+
         $validator = new Validator();
 
         $validation_error = $validator->new_validation_error([
@@ -43,11 +35,11 @@ class ValidationProtocolTest extends TestCase
             'validation_parameters' => [1, 2]
         ]);
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default value
@@ -62,11 +54,11 @@ class ValidationProtocolTest extends TestCase
             'validation_parameters' => [1, 2]
         ]);
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default attribute_path
@@ -81,11 +73,11 @@ class ValidationProtocolTest extends TestCase
             'validation_parameters' => [1, 2]
         ]);
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default validation_name
@@ -100,11 +92,11 @@ class ValidationProtocolTest extends TestCase
             'validation_parameters' => [1, 2]
         ]);
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => null,
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => null,
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default validation_parameters
@@ -119,17 +111,18 @@ class ValidationProtocolTest extends TestCase
             'validation_name' => 'custom-validation'
         ]);
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => []
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => []
         ]);
-    }
+
+    });
 
 
-    public function testAddingNewValidationErrors()
-    {
+    $this->it( "adding new validation errors", function() {
+
         $validator = new Validator();
 
         $validator->add_error([
@@ -141,11 +134,11 @@ class ValidationProtocolTest extends TestCase
 
         $validation_error = $validator->get_errors()[0];
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default value
@@ -162,11 +155,11 @@ class ValidationProtocolTest extends TestCase
 
         $validation_error = $validator->get_errors()[0];
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default attribute_path
@@ -183,11 +176,11 @@ class ValidationProtocolTest extends TestCase
 
         $validation_error = $validator->get_errors()[0];
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default validation_name
@@ -204,11 +197,11 @@ class ValidationProtocolTest extends TestCase
 
         $validation_error = $validator->get_errors()[0];
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => null,
-            'validation_parameters' => [1, 2]
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => null,
+            'get_validation_parameters()' => [1, 2]
         ]);
 
         // Default validation_parameters
@@ -225,11 +218,13 @@ class ValidationProtocolTest extends TestCase
 
         $validation_error = $validator->get_errors()[0];
 
-        $this->assertValidationError( $validation_error, [
-            'value' => 123,
-            'attribute_path' => 'address.street',
-            'validation_name' => 'custom-validation',
-            'validation_parameters' => []
+        $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
+            'get_value()' => 123,
+            'get_attribute_path()' => 'address.street',
+            'get_validation_name()' => 'custom-validation',
+            'get_validation_parameters()' => []
         ]);
-    }
-}
+
+    });
+
+});

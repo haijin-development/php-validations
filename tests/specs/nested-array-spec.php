@@ -1,18 +1,17 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-
 use Haijin\Validations\Validator;
 
-/**
- * Tests the use of nested attributes in validations of indexed arrays.
- */
-class NestedArrayTest extends TestCase
-{
-    use \Haijin\Tests\ValidationsTestBehaviour;
+$spec->describe( "When validating nested attributes in validations of indexed arrays", function() {
 
-    public function testNestedArrayPasses()
-    {
+    $this->def( "increment_called_counter", function() {
+
+        $this->called_counter += 1 ;
+
+    });    
+
+    $this->it( "nested array passes", function() {
+
         $purchase = [
             'items' => [
                 [
@@ -43,11 +42,13 @@ class NestedArrayTest extends TestCase
             });
         });
 
-        $this->assertEquals( 0, count( $validation_errors ) );
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
-    public function testNestedArrayFails()
-    {
+    });
+
+
+    $this->it( "nested array fails", function() {
+
         $purchase = [
             'items' => [
                 [
@@ -78,17 +79,20 @@ class NestedArrayTest extends TestCase
             });
         });
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => null,
-            'attribute_path' => 'items.[1].price',
-            'validation_name' => 'is_present',
-            'validation_parameters' => []
-        ]);
-    }
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
-    public function testThisBindingIsKeptAcrossNestedAttributeValidations()
-    {
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => null,
+            'get_attribute_path()' => 'items.[1].price',
+            'get_validation_name()' => 'is_present',
+            'get_validation_parameters()' => []
+        ]);
+
+    });
+
+
+    $this->it( "this binding is kept across nested attribute validations", function() {
+
         $purchase = [
             'items' => [
                 [
@@ -129,11 +133,13 @@ class NestedArrayTest extends TestCase
             });
         }, $this);
 
-        $this->assertEquals( 8, $this->called_counter );
-    }
+        $this->expect( $this->called_counter ) ->to() ->equal( 8 );
 
-    public function testSiblingItemsAreValidatedEvenWhenAnItemValidationFails()
-    {
+    });
+
+
+    $this->it( "sibling items are validated even when an item validation fails", function() {
+
         $purchase = [
             'items' => [
                 [
@@ -170,19 +176,17 @@ class NestedArrayTest extends TestCase
             });
         }, $this);
 
-        $this->assertEquals( 3, $this->called_counter );
+        $this->expect( $this->called_counter ) ->to() ->equal( 3 );
 
-        $this->assertEquals( 1, count( $validation_errors ) );
-        $this->assertValidationError( $validation_errors[0], [
-            'value' => null,
-            'attribute_path' => 'items.[1].price',
-            'validation_name' => 'is_present',
-            'validation_parameters' => []
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
+
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => null,
+            'get_attribute_path()' => 'items.[1].price',
+            'get_validation_name()' => 'is_present',
+            'get_validation_parameters()' => []
         ]);
-    }
 
-    public function increment_called_counter()
-    {
-        $this->called_counter += 1 ;
-    }
-}
+    });
+
+});

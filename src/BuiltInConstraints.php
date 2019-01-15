@@ -541,7 +541,7 @@ trait BuiltInConstraints
             return $this->validate_with_validator( $custom_validation, $this_binding );
         }
 
-        if( is_callable( $custom_validation ) ) {
+        if( $custom_validation instanceof \Closure ) {
             return $this->validate_with_callable( $custom_validation, $this_binding);
         }
     }
