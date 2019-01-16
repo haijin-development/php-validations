@@ -1,34 +1,34 @@
 <?php
 
-use Haijin\Tools\AttributePath;
-use Haijin\Validations\ValidationError;
-use Haijin\Validations\ValidationErrorsDictionary;
+use Haijin\Attribute_Path;
+use Haijin\Validations\Validation_Error;
+use Haijin\Validations\Validation_Errors_Dictionary;
 
-$spec->describe( "A ValidationErrorsDictionary", function() {
+$spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->let( "dictionary", function() {
 
-        return new ValidationErrorsDictionary();
+        return new Validation_Errors_Dictionary();
 
     });
 
     $this->it( "RaisesAnErrorIfNoMessageIsFound", function() {
 
-        $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+        $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
         $this->expect( function() use($validation_error) {
 
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\ValidationMessageNotFoundException',
+            'Haijin\Validations\Validation_Message_Not_Found_Exception',
             function($error) use($validation_error) {
 
                 $this->expect( $error->get_validation_error() ) ->to() ->be( "===" )
                     ->than( $validation_error );
 
                 $this->expect( $error->getMessage() ) ->to()
-                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+                    ->equal( 'No message formatter was found for the Validation_Error "length"' );
 
         });
 
@@ -44,7 +44,7 @@ $spec->describe( "A ValidationErrorsDictionary", function() {
 
         });
 
-        $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+        $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
         $message = $this->dictionary->message_for( $validation_error );
 
@@ -66,16 +66,16 @@ $spec->describe( "A ValidationErrorsDictionary", function() {
 
         $this->expect( function() {
 
-            $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+            $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\ValidationMessageNotFoundException',
+            'Haijin\Validations\Validation_Message_Not_Found_Exception',
             function($error) {
 
                 $this->expect( $error->getMessage() ) ->to()
-                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+                    ->equal( 'No message formatter was found for the Validation_Error "length"' );
         });
 
     });
@@ -106,7 +106,7 @@ $spec->describe( "A ValidationErrorsDictionary", function() {
 
         });
 
-        $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+        $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
         $message = $this->dictionary->message_for( $validation_error );
 
@@ -130,16 +130,16 @@ $spec->describe( "A ValidationErrorsDictionary", function() {
 
         $this->expect( function() {
 
-            $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+            $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\ValidationMessageNotFoundException',
+            'Haijin\Validations\Validation_Message_Not_Found_Exception',
             function($error) {
 
                 $this->expect( $error->getMessage() ) ->to()
-                    ->equal( 'No message formatter was found for the ValidationError "length"' );
+                    ->equal( 'No message formatter was found for the Validation_Error "length"' );
 
         });
 
@@ -159,7 +159,7 @@ $spec->describe( "A ValidationErrorsDictionary", function() {
 
         });
 
-        $validation_error = new ValidationError( [ 2 ], new AttributePath( 'address.street' ), 'length', [2, 3] );
+        $validation_error = new Validation_Error( [ 2 ], new Attribute_Path( 'address.street' ), 'length', [2, 3] );
 
         $message = $this->dictionary->message_for( $validation_error );
 

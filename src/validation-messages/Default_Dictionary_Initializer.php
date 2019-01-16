@@ -3,18 +3,18 @@
 namespace Haijin\Validations;
 
 /**
- * Object to initialize ValidationErrorsDictionary with default message formatters.
+ * Object to initialize Validation_Errors_Dictionary with default message formatters.
  */
-class DefaultDictionaryInitializer
+class Default_Dictionary_Initializer
 {
     /**
-     * Initializes the ValidationErrorsDictionary with default message formatters.
-     * Returns the ValidationErrorsDictionary.
+     * Initializes the Validation_Errors_Dictionary with default message formatters.
+     * Returns the Validation_Errors_Dictionary.
      *
-     * @param ValidationErrorsDictionary $validation_erros_dictionary The dictionary to initalize with
+     * @param Validation_Errors_Dictionary $validation_erros_dictionary The dictionary to initalize with
      *      message formatters.
      *
-     * @return ValidationErrorsDictionary The initialized dictionary.
+     * @return Validation_Errors_Dictionary The initialized dictionary.
      */
     public function initialize($validation_erros_dictionary)
     {

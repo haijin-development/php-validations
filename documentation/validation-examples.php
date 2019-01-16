@@ -61,7 +61,7 @@ $validator->validate( $user, function($user) {
  * Reuse frequent validations in a Validator subclass:
  */
 
-class AddressValidator extends Validator
+class Address_Validator extends Validator
 {
     public function evaluate()
     {
@@ -95,7 +95,7 @@ $validation_errors = $validator->validate( $user, function($user) {
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( 'AddressValidator' );
+    $user->attr('address') ->is_defined() ->validate_with( 'Address_Validator' );
 });
 
 
@@ -103,7 +103,7 @@ $validation_errors = $validator->validate( $user, function($user) {
  * Pass a Validator subclass instance instead of its name to parametrized it:
  */
 
-class ConfigurableAddressValidator extends Validator
+class Configurable_Address_Validator extends Validator
 {
     public function __construct($max_length = 255)
     {
@@ -140,7 +140,7 @@ $validation_errors = $validator->validate( $user, function($user) {
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( new ConfigurableAddressValidator( 30 ) );
+    $user->attr('address') ->is_defined() ->validate_with( new Configurable_Address_Validator( 30 ) );
 });
 
 /**
@@ -192,7 +192,7 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
   * to fullfill the validation needs.
   */
 
- class CustomValidator extends Validator
+ class Custom_Validator extends Validator
  {
     public function evaluate()
     {
@@ -305,7 +305,7 @@ $validation_errors = $validator->validate( $user, function($user) {
 /**
  * Validates a purchase object.
  */
-class PurchaseValidator extends Validator
+class Purchase_Validator extends Validator
 {
     /**
      * Validates a purchase object.
@@ -368,7 +368,7 @@ $purchase->total = 7.00;
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $purchase, function($purchase) {
-    $purchase ->is_defined() ->is_object() ->validate_with( 'PurchaseValidator' );
+    $purchase ->is_defined() ->is_object() ->validate_with( 'Purchase_Validator' );
 });
 
 /// Converters
@@ -387,7 +387,7 @@ $validation_errors = $validator->validate( '1', function($n) {
  * Write a custom converter with:
  */
 
-class IncrementConverter extends Validator
+class Increment_Converter extends Validator
 {
     public function evaluate()
     {
@@ -405,7 +405,7 @@ class IncrementConverter extends Validator
  * instead of Validator:
  */
 
-class ExtendedValidator extends Validator
+class Extended_Validator extends Validator
 {
     public function is_address()
     {
@@ -419,7 +419,7 @@ class ExtendedValidator extends Validator
     }
 }
 
-$validator = new ExtendedValidator();
+$validator = new Extended_Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
     $user ->is_defined();
@@ -438,7 +438,7 @@ $validation_errors = $validator->validate( $user, function($user) {
  *      Validate an object before storing it in a database:
  */
 
-abstract class PersistentCollection
+abstract class Persistent_Collection
 {
     public function save($object)
     {
@@ -468,7 +468,7 @@ abstract class PersistentCollection
     abstract protected function validate($validator);
 }
 
-class UserPersistenCollection extends PersistentCollection
+class User_Persisten_Collection extends Persistent_Collection
 {
     protected function validate($user)
     {
@@ -495,7 +495,7 @@ $user = [
     ]
 ];
 
-$persistent_collection = new UserPersistenCollection();
+$persistent_collection = new User_Persisten_Collection();
 $validation_errors = $persistent_collection->save( $user );
 
 var_dump( $validation_errors );

@@ -3,19 +3,19 @@
 namespace Haijin\Validations;
 
 /**
- * ValidationsException raised when trying to format a validation message for a missing valition name.
+ * Validations_Exception raised when trying to format a validation message for a missing valition name.
  */
-class ValidationMessageNotFoundException extends ValidationsException
+class Validation_Message_Not_Found_Exception extends Validations_Exception
 {
     /**
-     * The ValidationError whose message formatter was missing.
+     * The Validation_Error whose message formatter was missing.
      */
     protected $validation_error;
 
     /**
-     * Initializes this instance with the ValidationError whose message formatter was missing.
+     * Initializes this instance with the Validation_Error whose message formatter was missing.
      *
-     * @param ValidationError $validation_error The ValidationError whose message formatter was missing.
+     * @param Validation_Error $validation_error The Validation_Error whose message formatter was missing.
      * @param string $error_message Optional - The text message for this Exception. If none is provided
      *          a default one is used.
      */
@@ -34,13 +34,13 @@ class ValidationMessageNotFoundException extends ValidationsException
      */
     protected function default_error_message()
     {
-        return "No message formatter was found for the ValidationError \"{$this->validation_error->get_validation_name()}\"";
+        return "No message formatter was found for the Validation_Error \"{$this->validation_error->get_validation_name()}\"";
     }
 
     /// Accessing
 
     /**
-     * Returns the ValidationError whose message formatter was missing.
+     * Returns the Validation_Error whose message formatter was missing.
      */
     public function get_validation_error()
     {

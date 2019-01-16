@@ -7,15 +7,15 @@ namespace Haijin\Validations;
  *
  * Example
  *
- *      /// Create a new ValidationErrorsDictionary
+ *      /// Create a new Validation_Errors_Dictionary
  *
  *      // Use a dictionary with default messages
  *
- *      $errors_dictionary = ValidationErrorsDictionary::new_default();
+ *      $errors_dictionary = Validation_Errors_Dictionary::new_default();
  *
  *      // or create a new one
  *
- *      $errors_dictionary = new ValidationErrorsDictionary();
+ *      $errors_dictionary = new Validation_Errors_Dictionary();
  *
  *      /// Define a default validation message
  *
@@ -56,7 +56,7 @@ namespace Haijin\Validations;
  *          print "\n";
  *      }
  */
-class ValidationErrorsDictionary
+class Validation_Errors_Dictionary
 {
     /// Class methods
 
@@ -68,7 +68,7 @@ class ValidationErrorsDictionary
     static protected $dictionary_initializer = null;
 
     /**
-     * Returns a new instance of a ValidationErrorsDictionary initalized with default message formatters.
+     * Returns a new instance of a Validation_Errors_Dictionary initalized with default message formatters.
      */
     static public function new_default()
     {
@@ -78,8 +78,8 @@ class ValidationErrorsDictionary
         /// Accessing
 
     /**
-     * Returns the global dictionary initializer used to initialize instances of ValidationErrorsDictionary when
-     * calling ValidationErrorsDictionary::default.
+     * Returns the global dictionary initializer used to initialize instances of Validation_Errors_Dictionary when
+     * calling Validation_Errors_Dictionary::default.
      */
     static public function get_dictionary_initializer()
     {
@@ -87,8 +87,8 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Sets the global dictionary initializer used to initialize instances of ValidationErrorsDictionary when
-     * calling ValidationErrorsDictionary::default.
+     * Sets the global dictionary initializer used to initialize instances of Validation_Errors_Dictionary when
+     * calling Validation_Errors_Dictionary::default.
      */
     static public function set_dictionary_initializer($dictionary_initializer)
     {
@@ -98,17 +98,17 @@ class ValidationErrorsDictionary
     /// Instance methods
 
     /**
-     * A map from validation names to ClosureContexts that format ValidationErrors.
+     * A map from validation names to Closure_Contexts that format ValidationErrors.
      */
     protected $message_formatters_map;
 
     /**
-     * An optional ClosureContext acting as a default formatter when no other formatter is found for a ValidationError.
+     * An optional Closure_Context acting as a default formatter when no other formatter is found for a Validation_Error.
      */
     protected $default_message_formatter;
 
     /**
-     * The binding to '$this' pseudo-variable when evaluating each formatter ClosureContext.
+     * The binding to '$this' pseudo-variable when evaluating each formatter Closure_Context.
      */
     protected $binding;
 
@@ -144,7 +144,7 @@ class ValidationErrorsDictionary
      * @param object $bindig An object that will be bound to the '$this' variable when evaluating
      *      each message formatter.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     public function define($definition_closure, $binding = null)
     {
@@ -160,14 +160,14 @@ class ValidationErrorsDictionary
     /**
      * Evaluates the $definition_closure defined in the $file_path.
      *
-     * @param string|FilePath $file_path The file with the definition closure.
+     * @param string|File_Path $file_path The file with the definition closure.
      *
-     * @return AssetsLibrary Returns $this object.
+     * @return Assets_Library Returns $this object.
      */
     public function define_in_file($file_path)
     {
         if( is_string( $file_path ) ) {
-            $file_path = new \Haijin\Tools\FilePath( $file_path );
+            $file_path = new \Haijin\File_Path( $file_path );
         }
 
         return $this->define( function($messages) use($file_path) {
@@ -181,7 +181,7 @@ class ValidationErrorsDictionary
      * @param object $bindig An object that will be bound to the '$this' variable when evaluating each message formatter.
      * @param closure $closure A closure.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     protected function _with_binding_do($binding, $closure)
     {
@@ -199,12 +199,12 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Defines a ClosureContext to format a ValidationError for validations of type $validation_name.
+     * Defines a Closure_Context to format a Validation_Error for validations of type $validation_name.
      *
      * @param string $validation_name The name of the validations which messages will be formatted using the $formatter_closure.
      * @param closure $formatter_closure A closure that returns the formatted message.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     public function at_validation($validation_name, $formatter_closure)
     {
@@ -214,11 +214,11 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Drops the ClosureContext that formats a ValidationError for validations of type $validation_name.
+     * Drops the Closure_Context that formats a Validation_Error for validations of type $validation_name.
      *
      * @param string $validation_name The name of the validations to drop its formatter closure.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     public function drop_validation($validation_name)
     {
@@ -228,12 +228,12 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Defines a ClosureContext to format ValidationError by default, unless a more specific closure is found
-     * for a ValidationError.
+     * Defines a Closure_Context to format Validation_Error by default, unless a more specific closure is found
+     * for a Validation_Error.
      *
      * @param closure $formatter_closure A closure that returns the formatted message.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     public function default($formatter_closure)
     {
@@ -243,9 +243,9 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Drops the ClosureContext that formats a ValidationError by default.
+     * Drops the Closure_Context that formats a Validation_Error by default.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     public function drop_default()
     {
@@ -255,23 +255,23 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Creates and returns a new ClosureContext with a closure and the current $this->binding.
+     * Creates and returns a new Closure_Context with a closure and the current $this->binding.
      *
      * @param closure $formatter_closure A closure that returns a formatted message.
      *
-     * @return ClosureContext Returns the created ClosureContext.
+     * @return Closure_Context Returns the created Closure_Context.
      */
     protected function _new_closure_context($closure)
     {
-        return new \Haijin\Tools\ClosureContext( $this->binding, $closure );
+        return new \Haijin\Closure_Context( $this->binding, $closure );
     }
 
     /// Asking
 
     /**
-     * Returns true if $this dictionary has a default ClosureContext defined, false if not.
+     * Returns true if $this dictionary has a default Closure_Context defined, false if not.
      *
-     * @return bool Returns true if this instance has a default ClosureContext defined, false if not.
+     * @return bool Returns true if this instance has a default Closure_Context defined, false if not.
      */
     public function has_default()
     {
@@ -291,9 +291,9 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Returns true if $this dictionary has a message formatter for a ValidationError, false if not.
+     * Returns true if $this dictionary has a message formatter for a Validation_Error, false if not.
      *
-     * @param ValidationError $validation_name The ValidationError.
+     * @param Validation_Error $validation_name The Validation_Error.
      *
      * @return bool Returns true if $this dictionary has a message formatter for the $validation_error, false if not.
      */
@@ -309,11 +309,11 @@ class ValidationErrorsDictionary
     /// Accessing
 
     /**
-     * Returns the defined ClosureContext for a $validation_name.
+     * Returns the defined Closure_Context for a $validation_name.
      *
-     * @param string $validation_name The name of the validation to look up for its ClosureContext.
+     * @param string $validation_name The name of the validation to look up for its Closure_Context.
      *
-     * @return ClosureContext The ClosureContext defined for the $validation_name.
+     * @return Closure_Context The Closure_Context defined for the $validation_name.
      */
     protected function _closure_at($validation_name)
     {
@@ -321,14 +321,14 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Returns a ClosureContext to format an error message for a ValidationError.
+     * Returns a Closure_Context to format an error message for a Validation_Error.
      *
-     * If $this dictionary has a ClosureContext for the ValidationError::validation_name that ClosureContext
-     * is returned. If not the default ClosureContext is returned.
+     * If $this dictionary has a Closure_Context for the Validation_Error::validation_name that Closure_Context
+     * is returned. If not the default Closure_Context is returned.
      *
-     * @param ValidationError $validation_error The ValidationError to look up for its formatter ClosureContext.
+     * @param Validation_Error $validation_error The Validation_Error to look up for its formatter Closure_Context.
      *
-     * @return ClosureContext The ClosureContext found for the ValidationError.
+     * @return Closure_Context The Closure_Context found for the Validation_Error.
      */
     protected function _closure_for($validation_error)
     {
@@ -342,12 +342,12 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Returns a formatted message string for a ValidationError.
-     * If no formatter is found for the ValidationError a ValidationMessageNotFoundException is raised.
+     * Returns a formatted message string for a Validation_Error.
+     * If no formatter is found for the Validation_Error a Validation_Message_Not_Found_Exception is raised.
      *
-     * @param ValidationError $validation_error The ValidationError to be formatted to a end user message string.
+     * @param Validation_Error $validation_error The Validation_Error to be formatted to a end user message string.
      *
-     * @return string The message string to the end user for the ValidationError.
+     * @return string The message string to the end user for the Validation_Error.
      */
     public function message_for($validation_error)
     {
@@ -359,10 +359,10 @@ class ValidationErrorsDictionary
     /// Errors
 
     /**
-     * Validates that a message exists for a given ValidationError.
-     * Raises a ValidationMessageNotFoundException if not.
+     * Validates that a message exists for a given Validation_Error.
+     * Raises a Validation_Message_Not_Found_Exception if not.
      *
-     * @param ValidationError $validation_error The ValidationError to validate for message presence.
+     * @param Validation_Error $validation_error The Validation_Error to validate for message presence.
      */
     public function validate_message_presence_for($validation_error)
     {
@@ -373,15 +373,15 @@ class ValidationErrorsDictionary
     }
 
     /**
-     * Raises a ValidationMessageNotFoundException.
+     * Raises a Validation_Message_Not_Found_Exception.
      *
-     * @param ValidationError $validation_error The ValidationError that is missing a formatter ClosureContext.
+     * @param Validation_Error $validation_error The Validation_Error that is missing a formatter Closure_Context.
      */
     protected function _raise_message_not_found_error($validation_error)
     {
-        throw new ValidationMessageNotFoundException( $validation_error );
+        throw new Validation_Message_Not_Found_Exception( $validation_error );
     }
 }
 
-// Initialize the ValidationErrorsDictionary default initializer
-ValidationErrorsDictionary::set_dictionary_initializer( new DefaultDictionaryInitializer() );
+// Initialize the Validation_Errors_Dictionary default initializer
+Validation_Errors_Dictionary::set_dictionary_initializer( new Default_Dictionary_Initializer() );

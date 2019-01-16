@@ -84,7 +84,7 @@ Usage
 ```php
 $object->is_optional()
 ```
-Does not add any ValidationError.
+Does not add any Validation_Error.
 
 <a name="c-1-4"></a>
 ### is_empty()

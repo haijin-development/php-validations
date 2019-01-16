@@ -16,7 +16,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 
         $validation_errors = $validator->validate( $object, function($obj) {
 
-            $obj->validate_with( new CustomValidation() );
+            $obj->validate_with( new Custom_Validation() );
 
         });
 
@@ -36,7 +36,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 
         $validation_errors = $validator->validate( $object, function($obj) {
 
-            $obj->validate_with( new CustomValidation() );
+            $obj->validate_with( new Custom_Validation() );
 
         });
 
@@ -64,7 +64,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 
         $validation_errors = $validator->validate( $object, function($obj) {
 
-            $obj->validate_with( 'CustomValidation' );
+            $obj->validate_with( 'Custom_Validation' );
 
         });
 
@@ -84,7 +84,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 
         $validation_errors = $validator->validate( $object, function($obj) {
 
-            $obj->validate_with( 'CustomValidation' );
+            $obj->validate_with( 'Custom_Validation' );
 
         });
 
@@ -102,7 +102,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 });
 
 
-class CustomValidation extends Validator
+class Custom_Validation extends Validator
 {
     public function evaluate()
     {

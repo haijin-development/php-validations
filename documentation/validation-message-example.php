@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use Haijin\Validations\Validator;
-use Haijin\Validations\ValidationErrorsDictionary;
+use Haijin\Validations\Validation_Errors_Dictionary;
 
 // Collect some validations
 
@@ -15,15 +15,15 @@ $validation_errors = ( new Validator() )->validate( $object, function($user) {
 });
 
 
-/// Create a new ValidationErrorsDictionary
+/// Create a new Validation_Errors_Dictionary
 
 // Use a dictionary with default messages
 
-$errors_dictionary = ValidationErrorsDictionary::new_default();
+$errors_dictionary = Validation_Errors_Dictionary::new_default();
 
 // or create a new one
 
-$errors_dictionary = new ValidationErrorsDictionary();
+$errors_dictionary = new Validation_Errors_Dictionary();
 
 /// Define a default validation message
 

@@ -2,13 +2,13 @@
 
 namespace Haijin\Validations;
 
-use Haijin\Validations\HaltValidationException;
-use Haijin\Tools\ObjectAttributeAccessor;
+use Haijin\Validations\Halt_Validation_Exception;
+use Haijin\Object_Attribute_Accessor;
 
 class Validator implements \ArrayAccess
 {
-    use \Haijin\Validations\BuiltInConstraints;
-    use \Haijin\Validations\BuiltInConverters;
+    use \Haijin\Validations\Built_In_Constraints;
+    use \Haijin\Validations\Built_In_Converters;
 
     protected $value;
     protected $attribute_path;
@@ -23,7 +23,7 @@ class Validator implements \ArrayAccess
         $this->attribute_path = $this->_new_attribute_path();
         $this->validation_name = null;
         $this->validation_parameters = [];
-        $this->errors_collection = new \Haijin\Tools\OrderedCollection();
+        $this->errors_collection = new \Haijin\Ordered_Collection();
         $this->binding = $this;
     }
 
@@ -153,14 +153,14 @@ class Validator implements \ArrayAccess
      * This method is usefull in validations that need to compare or validate other values than
      * $this->value. For instance, when validating that partial sums equals a total.
      *
-     * @param string|array|AttributePath $attribute_chain The attribute path to the value.
+     * @param string|array|Attribute_Path $attribute_chain The attribute path to the value.
      *
      * @return object The value read from $this->value following the attribute chain.
      */
     public function get_value_at($attribute_chain)
     {
         $value = $this->get_value();
-        $accessor = new ObjectAttributeAccessor( $value );
+        $accessor = new Object_Attribute_Accessor( $value );
 
         if( $accessor->not_defined( $attribute_chain ) )
             return null;
@@ -235,7 +235,7 @@ class Validator implements \ArrayAccess
      * @param object $bindig An object that will be bound to the '$this' variable when evaluating each message formatter.
      * @param closure $closure A closure.
      *
-     * @return ValidationErrorsDictionary Returns $this instance.
+     * @return Validation_Errors_Dictionary Returns $this instance.
      */
     protected function _with_binding_do($binding, $closure)
     {
@@ -263,7 +263,7 @@ class Validator implements \ArrayAccess
         {
             $this->eval( $validation_closure );
 
-        } catch( HaltValidationException $e )
+        } catch( Halt_Validation_Exception $e )
         {
         }
 
@@ -273,7 +273,7 @@ class Validator implements \ArrayAccess
     // Errors
 
     /**
-     * Adds a all the ValidationError in $validation_errors_array to the errors collection.
+     * Adds a all the Validation_Error in $validation_errors_array to the errors collection.
      */
     public function add_all_errors($validation_errors_array)
     {
@@ -281,7 +281,7 @@ class Validator implements \ArrayAccess
     }
 
     /**
-     * Creates a new ValidationError and adds it to the errors collection.
+     * Creates a new Validation_Error and adds it to the errors collection.
      */
     public function add_error($params = [])
     {
@@ -289,7 +289,7 @@ class Validator implements \ArrayAccess
     }
 
     /**
-     * Adds a ValidationError to the errors collection.
+     * Adds a Validation_Error to the errors collection.
      */
     public function add_validation_error($validation_error)
     {
@@ -301,12 +301,12 @@ class Validator implements \ArrayAccess
      */
     public function halt()
     {
-        throw new HaltValidationException();
+        throw new Halt_Validation_Exception();
     }
 
     /**
-     * Creates and returns a new ValidationError.
-     * Does not add the ValidationError to the errors collection.
+     * Creates and returns a new Validation_Error.
+     * Does not add the Validation_Error to the errors collection.
      */
     public function new_validation_error($params = [])
     {
@@ -324,7 +324,7 @@ class Validator implements \ArrayAccess
         if( ! array_key_exists( 'validation_parameters', $params ) )
             $params['validation_parameters'] = $this->get_validation_parameters();
 
-        return new ValidationError(
+        return new Validation_Error(
             $params['value'],
             $params['attribute_path'],
             $params['validation_name'],
@@ -342,15 +342,15 @@ class Validator implements \ArrayAccess
     /// Creating instances
 
     /**
-     * Creates and returns a new instance of an AttributePath initialized with $attribute_path.
+     * Creates and returns a new instance of an Attribute_Path initialized with $attribute_path.
      *
-     * @param string|array|AttributePath The initial path.
+     * @param string|array|Attribute_Path The initial path.
      *
-     * @return AttributePath The AttributePath created.
+     * @return Attribute_Path The Attribute_Path created.
      */
     protected function _new_attribute_path($attribute_path = [])
     {
-        return new \Haijin\Tools\AttributePath( $attribute_path );
+        return new \Haijin\Attribute_Path( $attribute_path );
     }
 
     /// ArrayAccess implementation

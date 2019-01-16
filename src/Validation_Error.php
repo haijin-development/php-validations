@@ -13,7 +13,7 @@ namespace Haijin\Validations;
  * application, not this library. The application or another library should format the appropiate message
  * to the end user from the information in this object.
  */
-class ValidationError
+class Validation_Error
 {
     /**
      * The validated value.
@@ -38,10 +38,10 @@ class ValidationError
     /// Initializing
 
     /**
-     * Initializes the ValidationError object.
+     * Initializes the Validation_Error object.
      *
      * @param object $value The validated value.
-     * @param AttributePath $attribute_path The path from the root object to the validated nested attribute.
+     * @param Attribute_Path $attribute_path The path from the root object to the validated nested attribute.
      * @param string $validation_name The name of the validation that failed.
      * @param array $validation_parameters An array with the validation parameters, if any.
      */

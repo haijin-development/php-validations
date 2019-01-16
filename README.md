@@ -4,10 +4,10 @@ Framework to easily validate objects and attributes using a simple and expressiv
 
 [![Latest Stable Version](https://poser.pugx.org/haijin/validations/version)](https://packagist.org/packages/haijin/validations)
 [![Latest Unstable Version](https://poser.pugx.org/haijin/validations/v/unstable)](https://packagist.org/packages/haijin/validations)
-[![Build Status](https://travis-ci.org/haijin-development/php-validations.svg?branch=v0.0.2)](https://travis-ci.org/haijin-development/php-validations)
+[![Build Status](https://travis-ci.org/haijin-development/php-validations.svg?branch=v0.1.0)](https://travis-ci.org/haijin-development/php-validations)
 [![License](https://poser.pugx.org/haijin/validations/license)](https://packagist.org/packages/haijin/validations)
 
-### Version 0.0.2
+### Version 0.1.0
 
 This library is under active development and no stable version was released yet.
 
@@ -29,7 +29,7 @@ If you like it a lot you may contribute by [financing](https://github.com/haijin
 5. [Adding and overriding built-in validations and converters](#c-5)
 6. [Integrating the validations in applications](#c-6)
 7. [Validation messages](#c-7)
-    1. [Create a new ValidationErrorsDictionary](#c-7-1)
+    1. [Create a new Validation_Errors_Dictionary](#c-7-1)
     2. [Define a default validation message](#c-7-2)
     3. [Define more specific messages](#c-7-3)
 8. [Running the tests](#c-8)
@@ -45,7 +45,7 @@ Include this library in your project `composer.json` file:
 
     "require": {
         ...
-        "haijin/validations": "^0.0.2",
+        "haijin/validations": "^0.1.0",
         ...
     },
 
@@ -145,12 +145,12 @@ $validation_errors = $validator->validate( $user, function($user) {
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( 'AddressValidator' );
+    $user->attr('address') ->is_defined() ->validate_with( 'Address_Validator' );
 });
 
 // Where AddressValiador is a custom Validator subclass:
 
-class AddressValidator extends Validator
+class Address_Validator extends Validator
 {
     public function evaluate()
     {
@@ -191,12 +191,12 @@ $validation_errors = $validator->validate( $user, function($user) {
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( new ConfigurableAddressValidator( 30 ) );
+    $user->attr('address') ->is_defined() ->validate_with( new Configurable_Address_Validator( 30 ) );
 });
 
-// Where ConfigurableAddressValidator is a custom Validator subclass:
+// Where Configurable_Address_Validator is a custom Validator subclass:
 
-class ConfigurableAddressValidator extends Validator
+class Configurable_Address_Validator extends Validator
 {
     public function __construct($max_length = 255)
     {
@@ -267,7 +267,7 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
 Some validations involve accessing multiple attributes, invoking other validations and doing calculations. In those cases write a custom Validator subclass and use its available protocol.
 
 ```php
-class CustomValidator extends Validator
+class Custom_Validator extends Validator
 {
     public function evaluate()
     {
@@ -388,7 +388,7 @@ $validation_errors = $validator->validate( $user, function($user) {
 This Validator validates a purchase object:
 
 ```php
-class PurchaseValidator extends Validator
+class Purchase_Validator extends Validator
 {
     /**
      * Validates a purchase object.
@@ -453,7 +453,7 @@ $purchase->total = 7.00;
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $purchase, function($purchase) {
-    $purchase ->is_defined() ->is_object() ->validate_with( 'PurchaseValidator' );
+    $purchase ->is_defined() ->is_object() ->validate_with( 'Purchase_Validator' );
 });
 ```
 
@@ -478,7 +478,7 @@ $validation_errors = $validator->validate( '1', function($n) {
 Write a custom converter with:
 
 ```php
-class IncrementConverter extends Validator
+class Increment_Converter extends Validator
 {
     public function evaluate()
     {
@@ -495,7 +495,7 @@ class IncrementConverter extends Validator
 Override and add built in validations defining methods in a Validator subclass and using that subclass instead of Validator:
  
 ```php
-class ExtendedValidator extends Validator
+class Extended_Validator extends Validator
 {
     public function is_address()
     {
@@ -509,7 +509,7 @@ class ExtendedValidator extends Validator
     }
 }
 
-$validator = new ExtendedValidator();
+$validator = new Extended_Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
     $user ->is_defined();
@@ -530,7 +530,7 @@ Example that validates an object before storing it in a database.
 Integrate the validations like this:
 
 ```php
-abstract class PersistentCollection
+abstract class Persistent_Collection
 {
     public function save($object)
     {
@@ -560,7 +560,7 @@ abstract class PersistentCollection
     abstract protected function validate($validator);
 }
 
-class UserPersistenCollection extends PersistentCollection
+class User_Persisten_Collection extends Persistent_Collection
 {
     protected function validate($user)
     {
@@ -587,7 +587,7 @@ $user = [
     ]
 ];
 
-$persistent_collection = new UserPersistenCollection();
+$persistent_collection = new User_Persisten_Collection();
 $validation_errors = $persistent_collection->save( $user );
 
 var_dump( $validation_errors );
@@ -596,25 +596,25 @@ var_dump( $validation_errors );
 <a name="c-7"></a>
 ## Validation messages
 
-The validation message is not part of the ValidationError object. Validation messages are handled in a definition of their own.
+The validation message is not part of the Validation_Error object. Validation messages are handled in a definition of their own.
 
 This allows to conveniently define and override the messages to the end users in any part of the application.
 
 [Code example of defining validation messages](./documentation/validation-message-example.php).
 
 <a name="c-7-1"></a>
-### Create a new ValidationErrorsDictionary
+### Create a new Validation_Errors_Dictionary
 
 Use a dictionary with default messages
 
 ```php
-$errors_dictionary = ValidationErrorsDictionary::new_default();
+$errors_dictionary = Validation_Errors_Dictionary::new_default();
 ```
 
 or create a new one
 
 ```php
-$errors_dictionary = new ValidationErrorsDictionary();
+$errors_dictionary = new Validation_Errors_Dictionary();
 ```
 
 <a name="c-7-2"></a>
@@ -671,5 +671,5 @@ foreach( $validation_errors as $error ) {
 ## Running the tests
 
 ```
-composer test
+composer specs
 ```

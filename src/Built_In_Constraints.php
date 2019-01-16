@@ -5,7 +5,7 @@ namespace Haijin\Validations;
 /**
  * This trait has the definitions of the built in validations for the Validator class.
  */
-trait BuiltInConstraints
+trait Built_In_Constraints
 {
     /// Presence constraints
 

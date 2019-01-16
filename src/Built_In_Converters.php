@@ -5,7 +5,7 @@ namespace Haijin\Validations;
 /**
  * This trait has the definitions of the built in converters for the Validator class.
  */
-trait BuiltInConverters
+trait Built_In_Converters
 {
     /**
      * Converts the validated value to a string.
