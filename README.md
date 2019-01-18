@@ -4,12 +4,10 @@ Framework to easily validate objects and attributes using a simple and expressiv
 
 [![Latest Stable Version](https://poser.pugx.org/haijin/validations/version)](https://packagist.org/packages/haijin/validations)
 [![Latest Unstable Version](https://poser.pugx.org/haijin/validations/v/unstable)](https://packagist.org/packages/haijin/validations)
-[![Build Status](https://travis-ci.org/haijin-development/php-validations.svg?branch=v0.1.0)](https://travis-ci.org/haijin-development/php-validations)
+[![Build Status](https://travis-ci.org/haijin-development/php-validations.svg?branch=master)](https://travis-ci.org/haijin-development/php-validations)
 [![License](https://poser.pugx.org/haijin/validations/license)](https://packagist.org/packages/haijin/validations)
 
-### Version 0.1.0
-
-This library is under active development and no stable version was released yet.
+### Version 1.0.0
 
 If you like it a lot you may contribute by [financing](https://github.com/haijin-development/support-haijin-development) its development.
 
@@ -45,7 +43,7 @@ Include this library in your project `composer.json` file:
 
     "require": {
         ...
-        "haijin/validations": "^0.1.0",
+        "haijin/validations": "^1.0.0",
         ...
     },
 
