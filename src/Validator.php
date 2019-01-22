@@ -2,8 +2,11 @@
 
 namespace Haijin\Validations;
 
-use Haijin\Validations\Halt_Validation_Exception;
+use Haijin\Instantiator\Create;
+use Haijin\Ordered_Collection;
+use Haijin\Attribute_Path;
 use Haijin\Object_Attribute_Accessor;
+use Haijin\Validations\Halt_Validation_Exception;
 
 class Validator implements \ArrayAccess
 {
@@ -23,7 +26,7 @@ class Validator implements \ArrayAccess
         $this->attribute_path = $this->_new_attribute_path();
         $this->validation_name = null;
         $this->validation_parameters = [];
-        $this->errors_collection = new \Haijin\Ordered_Collection();
+        $this->errors_collection = Create::a( Ordered_Collection::class )->with();
         $this->binding = $this;
     }
 
@@ -160,7 +163,7 @@ class Validator implements \ArrayAccess
     public function get_value_at($attribute_chain)
     {
         $value = $this->get_value();
-        $accessor = new Object_Attribute_Accessor( $value );
+        $accessor = Create::a( Object_Attribute_Accessor::class )->with( $value );
 
         if( $accessor->not_defined( $attribute_chain ) )
             return null;
@@ -301,7 +304,7 @@ class Validator implements \ArrayAccess
      */
     public function halt()
     {
-        throw new Halt_Validation_Exception();
+        throw Create::a( Halt_Validation_Exception::class )->with();
     }
 
     /**
@@ -324,7 +327,7 @@ class Validator implements \ArrayAccess
         if( ! array_key_exists( 'validation_parameters', $params ) )
             $params['validation_parameters'] = $this->get_validation_parameters();
 
-        return new Validation_Error(
+        return Create::a( Validation_Error::class )->with(
             $params['value'],
             $params['attribute_path'],
             $params['validation_name'],
@@ -336,7 +339,7 @@ class Validator implements \ArrayAccess
     {
         $class_name = get_class( $this );
 
-        return new $class_name();
+        return Create::a( $class_name )->with();
     }
 
     /// Creating instances
@@ -350,7 +353,7 @@ class Validator implements \ArrayAccess
      */
     protected function _new_attribute_path($attribute_path = [])
     {
-        return new \Haijin\Attribute_Path( $attribute_path );
+        return Create::a( Attribute_Path::class )->with( $attribute_path );
     }
 
     /// ArrayAccess implementation
@@ -367,11 +370,13 @@ class Validator implements \ArrayAccess
 
     public function offsetSet( $offset , $value )
     {
-        throw new \Exception( "Attribute assignment through [] is not supported." );
+        throw Create::an( \Exception::class )
+                ->with( "Attribute assignment through [] is not supported." );
     }
 
     public function offsetUnset( $offset )
     {
-        throw new \Exception( "Attribute unset() is not supported." );
+        throw Create::an( \Exception::class )
+                ->with( "Attribute unset() is not supported." );
     }
 }

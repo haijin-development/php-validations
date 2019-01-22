@@ -2,6 +2,10 @@
 
 namespace Haijin\Validations;
 
+use  Haijin\Instantiator\Create;
+use  Haijin\File_Path;
+use  Haijin\Closure_Context;
+
 /**
  * Provides a nice DSL to define error messages for ValidationErrors.
  *
@@ -72,7 +76,7 @@ class Validation_Errors_Dictionary
      */
     static public function new_default()
     {
-        return self::$dictionary_initializer->initialize( new self() );
+        return self::$dictionary_initializer->initialize( Create::a( self::class )->with() );
     }
 
         /// Accessing
@@ -167,7 +171,7 @@ class Validation_Errors_Dictionary
     public function define_in_file($file_path)
     {
         if( is_string( $file_path ) ) {
-            $file_path = new \Haijin\File_Path( $file_path );
+            $file_path = Create::a( File_Path( $file_path ) );
         }
 
         return $this->define( function($messages) use($file_path) {
@@ -263,7 +267,7 @@ class Validation_Errors_Dictionary
      */
     protected function _new_closure_context($closure)
     {
-        return new \Haijin\Closure_Context( $this->binding, $closure );
+        return Create::a( Closure_Context::class )->with( $this->binding, $closure );
     }
 
     /// Asking
@@ -379,9 +383,12 @@ class Validation_Errors_Dictionary
      */
     protected function _raise_message_not_found_error($validation_error)
     {
-        throw new Validation_Message_Not_Found_Exception( $validation_error );
+        throw Create::a( Validation_Message_Not_Found_Exception::class )
+                ->with( $validation_error );
     }
 }
 
 // Initialize the Validation_Errors_Dictionary default initializer
-Validation_Errors_Dictionary::set_dictionary_initializer( new Default_Dictionary_Initializer() );
+Validation_Errors_Dictionary::set_dictionary_initializer(
+    Create::a( Default_Dictionary_Initializer::class )->with()
+);

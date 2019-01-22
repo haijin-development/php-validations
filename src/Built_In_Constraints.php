@@ -2,6 +2,8 @@
 
 namespace Haijin\Validations;
 
+use  Haijin\Instantiator\Create;
+
 /**
  * This trait has the definitions of the built in validations for the Validator class.
  */
@@ -99,7 +101,7 @@ trait Built_In_Constraints
     {
         $this->set_validation_name( 'is_defined' );
 
-        $validator = new self();
+        $validator = Create::a( self::class )->with();
 
         $errors = $validator->validate( $this->get_value(), function($obj) {
             $obj ->is_present() ->not_blank();
@@ -361,7 +363,7 @@ trait Built_In_Constraints
                 break;
 
             default:
-                throw new \Exception( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
+                throw Create::an( \Exception::class )->with( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
                 break;
         }
 
@@ -534,7 +536,7 @@ trait Built_In_Constraints
     public function validate_with($custom_validation, $this_binding = null)
     {
         if( is_string( $custom_validation ) ) {
-            $custom_validation = new  $custom_validation();
+            $custom_validation = Create::a( $custom_validation )->with();
         }
 
         if( is_a( $custom_validation, 'Haijin\Validations\Validator' ) ) {
