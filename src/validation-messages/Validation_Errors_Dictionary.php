@@ -171,7 +171,7 @@ class Validation_Errors_Dictionary
     public function define_in_file($file_path)
     {
         if( is_string( $file_path ) ) {
-            $file_path = Create::a( File_Path( $file_path ) );
+            $file_path = Create::a( File_Path::class )->with( $file_path );
         }
 
         return $this->define( function($messages) use($file_path) {

@@ -353,7 +353,7 @@ class Validator implements \ArrayAccess
      */
     protected function _new_attribute_path($attribute_path = [])
     {
-        return Create::a( Attribute_Path::class )->with( $attribute_path );
+        return Create::an( Attribute_Path::class )->with( $attribute_path );
     }
 
     /// ArrayAccess implementation

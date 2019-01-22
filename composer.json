@@ -2,7 +2,7 @@
     "name": "haijin/validations",
     "description": "Framework to easily validate objects and attributes using a simple and expressive DSL.",
     "keywords": ["validation", "expectation", "assertion", "DSL"],
-    "version": "1.0.3",
+    "version": "1.0.4",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/haijin-development/php-validations",
