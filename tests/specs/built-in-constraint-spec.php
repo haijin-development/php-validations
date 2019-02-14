@@ -49,7 +49,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
         $validation_errors = $validator->validate( $object, function($obj) {
             $obj->is_present();
 
-            throw new Exception("is_present should halt its branch");
+            throw new \RuntimeException("is_present should halt its branch");
         });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
@@ -127,7 +127,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
         $validation_errors = $validator->validate( $object, function($obj) {
             $obj->is_optional();
 
-            throw new Exception( "is_optional should halt and this should not be executed" );
+            throw new \RuntimeException( "is_optional should halt and this should not be executed" );
         });
 
         $this->expect( [] ) ->to() ->equal( $validation_errors );
@@ -318,7 +318,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
         $validation_errors = $validator->validate( $object, function($obj) {
             $obj->is_defined();
 
-            throw new Exception("is_defined should halt its branch");
+            throw new \RuntimeException("is_defined should halt its branch");
         });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
