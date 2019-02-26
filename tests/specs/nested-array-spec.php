@@ -22,7 +22,7 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
                 ],
                 [
                     'price' => 3.00
-                ]                
+                ]
             ],
         ];
 
@@ -59,7 +59,7 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
                 ],
                 [
                     'price' => 3.00
-                ]                
+                ]
             ],
         ];
 
@@ -103,7 +103,7 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
                 ],
                 [
                     'price' => 3.00
-                ]                
+                ]
             ],
         ];
 
@@ -150,7 +150,7 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
                 ],                
                 [
                     'price' => 3.00
-                ]                
+                ]
             ],
         ];
 
@@ -185,6 +185,59 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
             'get_attribute_path()' => 'items.[1].price',
             'get_validation_name()' => 'is_present',
             'get_validation_parameters()' => []
+        ]);
+
+    });
+
+    $this->it( "values are kept when nested attributes assigning values passes", function() {
+
+        $purchase = [
+            'items' => [
+                [
+                    'price' => '1.01'
+                ],
+                [
+                    'price' => '2.01'
+                ],
+                [
+                    'price' => '3.01'
+                ]
+            ],
+        ];
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $purchase, function($purchase) {
+            $purchase->is_present();
+
+            $purchase->attr('items', function($items) {
+                $items ->is_present() ->is_array() ->not_empty();
+
+                $items->each( function($each_item) {
+                    $each_item->attr( 'price', function($street) {
+                        $street ->is_present() ->as_float();
+                    });
+                });
+            });
+        });
+
+        $this->expect( $validator->get_value() ) ->to() ->be() ->exactly_like([
+            'items' => [
+                [
+                    'price' => function($value) {
+                        $this->expect( $value ) ->to() ->be( "===" ) ->than( 1.01 );
+                    }
+                ],
+                [
+                    'price' => function($value) {
+                        $this->expect( $value ) ->to() ->be( "===" ) ->than( 2.01 );
+                    }
+                ],[
+                    'price' => function($value) {
+                        $this->expect( $value ) ->to() ->be( "===" ) ->than( 3.01 );
+                    }
+                ]
+            ]
         ]);
 
     });

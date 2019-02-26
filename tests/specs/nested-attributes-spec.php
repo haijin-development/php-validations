@@ -339,4 +339,43 @@ $spec->describe( "When validating nested attributes in validations of associativ
 
     });
 
+    $this->it( "values are kept when nested attributes assigning values passes", function() {
+
+        $user = [
+            'name' => 'Lisa',
+            'last_name' => 'Simpson',
+            'address' => [
+                'street' => 'Evergreen',
+                'number' => '742'
+            ]
+        ];
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $user, function($user) {
+            $user->is_present();
+
+            $user->attr('address', function($address) {
+                $address ->is_present();
+
+                $address->attr( 'street', function($street) {
+                    $street->is_string();
+                });
+
+                $address->attr( 'number', function($number) {
+                    $number->is_string() ->as_int();
+                });
+            });
+        });
+
+        $this->expect( $validator->get_value() ) ->to() ->be() ->like([
+            "address" => [
+                "number" => function($value) {
+                    $this->expect( $value ) ->to() ->be( "===" ) ->than( 742 );
+                }
+            ]
+        ]);
+
+    });
+
 });
