@@ -46,15 +46,22 @@ trait Built_In_Constraints
 
     /**
      * Validates that the value is not null.
+     * If an optional $default_value is given sets the value to the default value.
+     * Otherwise halts further validations without failing.
      *
      * @return Validator $this object
      */
-    public function is_optional()
+    public function is_optional($default_value = null)
     {
         $this->set_validation_name( 'is_optional' );
 
         if( $this->get_value() === null ) {
-            $this->halt();
+
+            if( $default_value === null ) {
+                $this->halt();
+            }
+
+            $this->set_value( $default_value );
         }
 
         return $this;

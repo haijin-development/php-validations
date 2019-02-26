@@ -96,7 +96,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
     });
 
-    $this->it( "is_optional passes", function() {
+    $this->it( "is_optional fails", function() {
 
         $object = 'a string';
 
@@ -132,6 +132,21 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
         $this->expect( [] ) ->to() ->equal( $validation_errors );
 
+    });
+
+    $this->it( "is_optional sets a defualt value", function() {
+
+        $object = null;
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $object, function($obj) {
+            $obj->is_optional( "default value" );
+        });
+
+        $this->expect( $validator->get_value() ) ->to() ->equal( "default value" );
+
+        $this->expect( [] ) ->to() ->equal( $validation_errors );
     });
 
     $this->it( "is_empty passes", function() {

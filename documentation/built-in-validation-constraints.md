@@ -5,7 +5,7 @@
 1. [Presence constraints](#c-1)
     1. [is_present()](#c-1-1)
     2. [not_present()](#c-1-2)
-    3. [is_optional()](#c-1-3)
+    3. [is_optional($default_value = null)](#c-1-3)
     4. [is_empty()](#c-1-4)
     5. [not_empty()](#c-1-5)
     6. [is_defined()](#c-1-6)
@@ -75,16 +75,21 @@ $object->not_present()
 Halts on failure.
 
 <a name="c-1-3"></a>
-### is_optional()
+### is_optional($default_value = null)
 
-Halts if the value is null.
+If no $default_value is given halts if the validated value is null.
+
+If a $default_value is given and the validated value is null sets the $default_value.
+
+It does not add any Validation_Error in any case.
 
 Usage
 
 ```php
 $object->is_optional()
+
+$object->is_optional( 10 )
 ```
-Does not add any Validation_Error.
 
 <a name="c-1-4"></a>
 ### is_empty()
