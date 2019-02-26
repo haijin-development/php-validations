@@ -165,10 +165,7 @@ class Validator implements \ArrayAccess
         $value = $this->get_value();
         $accessor = Create::a( Object_Attribute_Accessor::class )->with( $value );
 
-        if( $accessor->not_defined( $attribute_chain ) )
-            return null;
-
-        return $accessor->get_value_at( $attribute_chain );
+        return $accessor->get_value_at_if_absent( $attribute_chain, null );
     }
 
     // Validation DSL
@@ -217,8 +214,12 @@ class Validator implements \ArrayAccess
         $nested_validation->set_binding( $this->binding );
         $nested_validation->set_errors_collection( $this->errors_collection );
 
-        if( $validation_closure !== null )
+        if( $validation_closure !== null ) {
             $nested_validation->_isolate( $validation_closure );
+        }
+
+        $this->value = Create::a( Object_Attribute_Accessor::class )->with( $this->value )
+            ->set_value_at( $attribute_name, $nested_validation->get_value() );
 
         return $nested_validation;
     }
