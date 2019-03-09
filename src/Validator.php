@@ -2,7 +2,6 @@
 
 namespace Haijin\Validations;
 
-use Haijin\Instantiator\Create;
 use Haijin\Ordered_Collection;
 use Haijin\Attribute_Path;
 use Haijin\Object_Attribute_Accessor;
@@ -18,7 +17,8 @@ class Validator implements \ArrayAccess
     protected $validation_name;
     protected $validation_parameters;
     protected $errors_collection;
-    protected $binding;
+
+    /// Initializing
 
     public function __construct()
     {
@@ -26,8 +26,23 @@ class Validator implements \ArrayAccess
         $this->attribute_path = $this->_new_attribute_path();
         $this->validation_name = null;
         $this->validation_parameters = [];
-        $this->errors_collection = Create::a( Ordered_Collection::class )->with();
-        $this->binding = $this;
+        $this->errors_collection = new Ordered_Collection();
+    }
+
+    /// Callable protocol
+
+    public function __invoke($validator)
+    {
+        $this->set_value( $validator->get_value() );
+        $this->set_attribute_path( $validator->get_attribute_path() );
+        $this->set_errors_collection( $validator->get_errors_collection() );
+
+        $this->evaluate();
+    }
+
+    public function evaluate()
+    {
+        $this->raise_missing_evaluate_method_error();
     }
 
     // Accessing
@@ -70,7 +85,7 @@ class Validator implements \ArrayAccess
     }
 
     /**
-     * Returns the collection of collected ValidationErrors.
+     * Returns the collection of collected Validation_Errors.
      */
     public function get_errors()
     {
@@ -81,7 +96,7 @@ class Validator implements \ArrayAccess
      * Gets the errors_collection.
      * Returns $this.
      */
-    public function get_errors_collection($errors_collection)
+    public function get_errors_collection()
     {
         return $this->errors_collection;
     }
@@ -135,18 +150,6 @@ class Validator implements \ArrayAccess
         return $this;        
     }
 
-    /**
-     * Sets the binding used for $this pseudo-variable when evaluating closures.
-     *
-     * Returns $this.
-     */
-    public function set_binding($binding)
-    {
-        $this->binding = $binding;
-
-        return $this;
-    }
-
     /// Accessing nested attributes
 
 
@@ -163,7 +166,7 @@ class Validator implements \ArrayAccess
     public function get_value_at($attribute_chain)
     {
         $value = $this->get_value();
-        $accessor = Create::a( Object_Attribute_Accessor::class )->with( $value );
+        $accessor = new Object_Attribute_Accessor( $value );
 
         return $accessor->get_value_at_if_absent( $attribute_chain, null );
     }
@@ -171,38 +174,32 @@ class Validator implements \ArrayAccess
     // Validation DSL
 
     /**
-     * Evaluates a validation DSL closure collecting the validation errors.
+     * Evaluates a validation DSL callable collecting the validation errors.
      *
      * Returns an array with all the validation errors collected.
      */
-    public function validate($value, $validation_closure, $binding = null)
+    public function validate($value, $validation_callable)
     {
-        if( $binding === null ) {
-            $binding = $this->binding;
-        }
-
         $this->set_value( $value );
 
-        $this->_with_binding_do( $binding, function() use($validation_closure) {
-            $this->_isolate( $validation_closure );
-        });
+        $this->_isolate( $validation_callable );
 
         return $this->get_errors();
     }
 
     /**
-     * Evaluates a validation DSL closure on $this Validator.
+     * Evaluates a validation DSL callable on $this Validator.
      *
      * Returns $this Validator.
      */
-    public function eval($validation_closure)
+    public function eval($validation_callable)
     {
-        $validation_closure->call( $this->binding, $this );
+        $validation_callable( $this );
 
         return $this;
     }
 
-    public function attr($attribute_name, $validation_closure = null)
+    public function attr($attribute_name, $validation_callable = null)
     {
         $nested_value = $this->get_value_at( $attribute_name );
 
@@ -211,61 +208,38 @@ class Validator implements \ArrayAccess
         $nested_validation->set_attribute_path(
             $this->get_attribute_path()->concat( $attribute_name )
         );
-        $nested_validation->set_binding( $this->binding );
         $nested_validation->set_errors_collection( $this->errors_collection );
 
-        if( $validation_closure !== null ) {
-            $nested_validation->_isolate( $validation_closure );
+        if( $validation_callable !== null ) {
+            $nested_validation->_isolate( $validation_callable );
         }
 
-        $this->value = Create::a( Object_Attribute_Accessor::class )->with( $this->value )
-            ->set_value_at( $attribute_name, $nested_validation->get_value() );
+        $this->value = ( new Object_Attribute_Accessor( $this->value ) )
+                ->set_value_at( $attribute_name, $nested_validation->get_value() );
 
         return $nested_validation;
     }
 
-    public function each( $each_item_validation_closure )
+    public function each( $each_item_validation_callable )
     {
         foreach( $this->get_value() as $index => $item) {
             $attribute_name = "[" . $index . "]";
 
-            $this->attr( $attribute_name, $each_item_validation_closure );
+            $this->attr( $attribute_name, $each_item_validation_callable );
         }
     }
 
     /**
-     * Temporary sets $this->binding to a given binding, evaluates a closure and restores the original binding.
-     *
-     * @param object $bindig An object that will be bound to the '$this' variable when evaluating each message formatter.
-     * @param closure $closure A closure.
-     *
-     * @return Validation_Errors_Dictionary Returns $this instance.
-     */
-    protected function _with_binding_do($binding, $closure)
-    {
-        $previous_binding = $this->binding;
-
-        $this->binding = $binding;
-
-        try{
-            $closure->call( $this, $this );
-        } finally {
-            $this->binding = $previous_binding;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Evaluates a validation DSL closure on $this Validator catching HaltValidationExceptions.
+     * Evaluates a validation DSL callable on $this Validator catching
+     * HaltValidationExceptions.
      *
      * Returns $this Validator.
      */
-    protected function _isolate($validation_closure)
+    protected function _isolate($validation_callable)
     {
         try
         {
-            $this->eval( $validation_closure );
+            $this->eval( $validation_callable );
 
         } catch( Halt_Validation_Exception $e )
         {
@@ -305,7 +279,7 @@ class Validator implements \ArrayAccess
      */
     public function halt()
     {
-        throw Create::a( Halt_Validation_Exception::class )->with();
+        throw new Halt_Validation_Exception();
     }
 
     /**
@@ -328,7 +302,7 @@ class Validator implements \ArrayAccess
         if( ! array_key_exists( 'validation_parameters', $params ) )
             $params['validation_parameters'] = $this->get_validation_parameters();
 
-        return Create::a( Validation_Error::class )->with(
+        return new Validation_Error(
             $params['value'],
             $params['attribute_path'],
             $params['validation_name'],
@@ -340,7 +314,7 @@ class Validator implements \ArrayAccess
     {
         $class_name = get_class( $this );
 
-        return Create::a( $class_name )->with();
+        return new $class_name();
     }
 
     /// Creating instances
@@ -354,8 +328,20 @@ class Validator implements \ArrayAccess
      */
     protected function _new_attribute_path($attribute_path = [])
     {
-        return Create::an( Attribute_Path::class )->with( $attribute_path );
+        return new Attribute_Path( $attribute_path );
     }
+
+    /// Raising errors
+
+    protected function raise_missing_evaluate_method_error()
+    {
+        $subclass_name = get_class( $this );
+
+        throw new \RuntimeException(
+            "'{$subclass_name}' must implement a 'public function evaluate()' with the validations for the object being validated."
+        );        
+    }
+
 
     /// ArrayAccess implementation
 
@@ -371,13 +357,15 @@ class Validator implements \ArrayAccess
 
     public function offsetSet( $offset , $value )
     {
-        throw Create::an( \Exception::class )
-                ->with( "Attribute assignment through [] is not supported." );
+        throw new \RuntimeException(
+            "Attribute assignment through [] is not supported."
+        );
     }
 
     public function offsetUnset( $offset )
     {
-        throw Create::an( \Exception::class )
-                ->with( "Attribute unset() is not supported." );
+        throw new \RuntimeException(
+            "Attribute unset() is not supported."
+        );
     }
 }

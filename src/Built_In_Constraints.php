@@ -2,8 +2,6 @@
 
 namespace Haijin\Validations;
 
-use  Haijin\Instantiator\Create;
-
 /**
  * This trait has the definitions of the built in validations for the Validator class.
  */
@@ -108,7 +106,7 @@ trait Built_In_Constraints
     {
         $this->set_validation_name( 'is_defined' );
 
-        $validator = Create::a( self::class )->with();
+        $validator = new self();
 
         $errors = $validator->validate( $this->get_value(), function($obj) {
             $obj ->is_present() ->not_blank();
@@ -370,7 +368,7 @@ trait Built_In_Constraints
                 break;
 
             default:
-                throw Create::an( \Exception::class )->with( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
+                throw new \RuntimeException( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
                 break;
         }
 
@@ -528,31 +526,25 @@ trait Built_In_Constraints
     /// Custom validations
 
     /**
-     * Validates the value with a Validator instance, Validator class or closure provided as an argument.
+     * Validates the value with a Validator class or callable provided as an argument.
      *
-     * The closure receives $this Validator as a parameter to perform the validation actions
-     * such as accessing the validate value, adding errors, halting, etc.
+     * The callable receives $this Validator as a parameter to perform the validation
+     * actions such as accessing the validate value, adding errors, halting, etc.
      *
-     * @param callable|Validator|string $custom_validation A closure, Validator instance or Validator class
+     * @param callable|string $custom_validator A callable or Validator::class name
      *          to perform the validation.
-     * @param object $this_binding Optional - An object to bind the $this pseudo-variable
-     *          within the closure. If none is provided $this Validator will be bound.
      *
      * @return Validator $this Validator.
      */
-    public function validate_with($custom_validation, $this_binding = null)
+    public function validate_with($custom_validator)
     {
-        if( is_string( $custom_validation ) ) {
-            $custom_validation = Create::a( $custom_validation )->with();
+        if( is_string( $custom_validator ) ) {
+            $custom_validator = new $custom_validator();
         }
 
-        if( is_a( $custom_validation, 'Haijin\Validations\Validator' ) ) {
-            return $this->validate_with_validator( $custom_validation, $this_binding );
-        }
+        $custom_validator( $this );
 
-        if( $custom_validation instanceof \Closure ) {
-            return $this->validate_with_callable( $custom_validation, $this_binding);
-        }
+        return $this;
     }
 
     /**
@@ -570,27 +562,6 @@ trait Built_In_Constraints
         $custom_validation->evaluate();
 
         $this->add_all_errors( $custom_validation->get_errors() );
-
-        return $this;
-    }
-
-    /**
-     * Validates the value with a closure provided as an argument.
-     *
-     * The closure receives $this Validator as a parameter to perform the validation actions
-     * such as accessing the validate value, adding errors, halting, etc.
-     *
-     * @param callable $custom_validation_callable A closure to perform the validation.
-     * @param object $this_binding Optional - An object to bind the $this pseudo-variable
-     *          within the closure. If none is provided $this Validator will be bound.
-     *
-     * @return Validator $this Validator.
-     */
-    public function validate_with_callable($custom_validation_callable, $this_binding = null)
-    {
-        if( $this_binding === null ) $this_binding = $this;
-
-        $custom_validation_callable->call( $this_binding, $this );
 
         return $this;
     }

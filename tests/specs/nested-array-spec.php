@@ -131,7 +131,7 @@ $spec->describe( "When validating nested attributes in validations of indexed ar
                     });
                 });
             });
-        }, $this);
+        });
 
         $this->expect( $this->called_counter ) ->to() ->equal( 8 );
 

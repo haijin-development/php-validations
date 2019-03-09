@@ -40,7 +40,7 @@
     6. [has_any( $values_collection )](#c-5-5)
     7. [has_none( $values_collection )](#c-5-6)
 6. [Converters](#c-6)
-    1. [to_string()](#c-6-1)
+    1. [as_string()](#c-6-1)
     2. [as_int()](#c-6-2)
     3. [as_float()](#c-6-3)
     4. [as_boolean](#c-6-4)
@@ -469,7 +469,7 @@ $object->has_none( [ 1, 2, 3 ] )
 ## Converters
 
 <a name="c-6-1"></a>
-### to_string()
+### as_string()
 
 Converts the validated value to a string.
 
@@ -478,7 +478,7 @@ Convertion is done using `(string)` cast.
 Usage
 
 ```php
-$object->to_string()
+$object->as_string()
 ```
 
 Subsequent validations will use the converted value.

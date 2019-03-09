@@ -2,6 +2,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+use Haijin\Debugger;
 use Haijin\Validations\Validator;
 
 /// Using a Validator object
@@ -22,6 +23,7 @@ $user = [
 $validator = new Validator();
 
 $validator->validate( $user, function($user) {
+
     $user ->is_present();
 
     $user->attr('name') ->is_defined() ->is_string();
@@ -33,7 +35,9 @@ $validator->validate( $user, function($user) {
         $address->attr('street') ->is_defined() ->is_string();
 
         $address->attr('number') ->is_defined() ->is_string();
+
     });
+
 });
 
 $validation_errors = $validator->get_errors();
@@ -41,6 +45,7 @@ $validation_errors = $validator->get_errors();
 // or also
 
 $validator->validate( $user, function($user) {
+
     $user ->is_present();
 
     $user['name'] ->is_defined() ->is_string();
@@ -53,6 +58,7 @@ $validator->validate( $user, function($user) {
 
         $address['number'] ->is_defined() ->is_string();
     });
+
 });
 
 /// Custom validations
@@ -89,6 +95,7 @@ $user = [
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
+
     $user ->is_present();
 
     $user->attr('name') ->is_defined() ->is_string();
@@ -96,6 +103,7 @@ $validation_errors = $validator->validate( $user, function($user) {
     $user->attr('last_name') ->is_defined() ->is_string();
 
     $user->attr('address') ->is_defined() ->validate_with( 'Address_Validator' );
+
 });
 
 
@@ -116,9 +124,11 @@ class Configurable_Address_Validator extends Validator
     {
         $this->is_array();
 
-        $this->attr('street') ->is_defined() ->is_string() ->length( 0, $this->max_length );
+        $this->attr('street') ->is_defined() ->is_string()
+                ->length( 0, $this->max_length );
 
-        $this->attr('number') ->is_defined() ->is_string() ->length( 0, $this->max_length );
+        $this->attr('number') ->is_defined() ->is_string()
+                ->length( 0, $this->max_length );
     }
 }
 
@@ -134,17 +144,20 @@ $user = [
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
+
     $user ->is_present();
 
     $user->attr('name') ->is_defined() ->is_string();
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( new Configurable_Address_Validator( 30 ) );
+    $user->attr('address') ->is_defined()
+            ->validate_with( new Configurable_Address_Validator( 30 ) );
+
 });
 
 /**
- * Perform simple validations using a closure.
+ * Perform simple validations using a callable.
  */
 
 $n = 1;
@@ -152,15 +165,19 @@ $n = 1;
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $n, function($n) {
+
     $n ->is_defined() ->is_int();
 
     $n->validate_with( function($validator) {
+
         $validator->set_validation_name( 'is_odd' );
 
-        if( $this->get_value() % 2 == 0 ){
+        if( $validator->get_value() % 2 == 0 ){
             $validator->add_error();            
         }         
+
     });
+
 });
 
 /// Validating arrays
@@ -174,6 +191,7 @@ $numbers = [ 1, 3, 5, 7 ];
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $numbers, function($numbers) {
+
     $numbers ->is_defined() ->is_array();
 
     $numbers->each( function($n) {
@@ -181,6 +199,7 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
         $n ->is_defined() ->is_int() ->is( '>', 0 );
 
     });
+
 });
 
 
@@ -278,6 +297,7 @@ $user = [
 $validator = new Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
+
     $user ->is_defined();
 
     $user->attr( 'name', function($name) {
@@ -297,7 +317,9 @@ $validation_errors = $validator->validate( $user, function($user) {
         // These child validations are not run
         $address->attr( 'street' ) ->is_defined();
         $address->attr( 'number' ) ->is_defined();
+
     });
+
 });
 
 /// Custom validator example
@@ -422,6 +444,7 @@ class Extended_Validator extends Validator
 $validator = new Extended_Validator();
 
 $validation_errors = $validator->validate( $user, function($user) {
+
     $user ->is_defined();
 
     $user->attr( 'name' ) ->is_defined() ->is_string();
@@ -429,6 +452,7 @@ $validation_errors = $validator->validate( $user, function($user) {
     $user->attr( 'last_name' ) ->is_defined() ->is_string();
 
     $user->attr( 'address' ) ->is_address();
+
 });
 
 /// Integrating the validations in applications
@@ -458,7 +482,6 @@ abstract class Persistent_Collection
     protected function validate_before_saving($object)
     {
         $validator = new Haijin\Validations\Validator;
-        $validator->set_binding( $this );
 
         return $validator->validate( $object, function($object) {
             $this->validate( $object );
@@ -498,4 +521,4 @@ $user = [
 $persistent_collection = new User_Persisten_Collection();
 $validation_errors = $persistent_collection->save( $user );
 
-var_dump( $validation_errors );
+Debugger::inspect( $validation_errors );

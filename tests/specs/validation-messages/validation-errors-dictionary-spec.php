@@ -2,13 +2,13 @@
 
 use Haijin\Attribute_Path;
 use Haijin\Validations\Validation_Error;
-use Haijin\Validations\Validation_Errors_Dictionary;
+use Haijin\Validations\Validation_Messages_Dictionary;
 
-$spec->describe( "A Validation_Errors_Dictionary", function() {
+$spec->describe( "A Validation_Messages_Dictionary", function() {
 
     $this->let( "dictionary", function() {
 
-        return new Validation_Errors_Dictionary();
+        return new Validation_Messages_Dictionary();
 
     });
 
@@ -36,9 +36,9 @@ $spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->it( "DefaultMessage", function() {
 
-        $this->dictionary->define( function() {
+        $this->dictionary->define( function($dict) {
 
-            $this->default( function($validation_error) {
+            $dict->default( function($validation_error) {
                 return "Invalid value";
             });
 
@@ -54,9 +54,9 @@ $spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->it( "DroppingDefaultMessage", function() {
 
-        $this->dictionary->define( function() {
+        $this->dictionary->define( function($dict) {
 
-            $this->default( function($validation_error) {
+            $dict->default( function($validation_error) {
                 return "Invalid value";
             });
 
@@ -98,9 +98,9 @@ $spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->it( "ValidationMessage", function() {
 
-        $this->dictionary->define( function() {
+        $this->dictionary->define( function($dict) {
 
-            $this->at_validation( "length", function($validation_error) {
+            $dict->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
 
@@ -116,16 +116,16 @@ $spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->it( "DroppingValidationMessage", function() {
 
-        $this->dictionary->define( function() {
+        $this->dictionary->define( function($dict) {
 
-            $this->at_validation( "length", function($validation_error) {
+            $dict->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
 
         });
 
-        $this->dictionary->define( function() {
-            $this->drop_validation( "length" );
+        $this->dictionary->define( function($dict) {
+            $dict->drop_validation( "length" );
         });
 
         $this->expect( function() {
@@ -147,13 +147,13 @@ $spec->describe( "A Validation_Errors_Dictionary", function() {
 
     $this->it( "ValidationMessageOverridesDefaultMessage", function() {
 
-        $this->dictionary->define( function() {
+        $this->dictionary->define( function($dict) {
 
-            $this->at_validation( "length", function($validation_error) {
+            $dict->at_validation( "length", function($validation_error) {
                 return "Invalid length";
             });
 
-            $this->default( function($validation_error) {
+            $dict->default( function($validation_error) {
                 return "Invalid value";
             });
 

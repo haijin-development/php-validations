@@ -102,7 +102,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                     $street ->is_string();
                 });
             });
-        }, $this);
+        });
 
         $this->expect( $this->called_counter ) ->to() ->equal( 3 );
 
@@ -197,7 +197,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
 
     });
 
-    $this->it( "nested attributes with no closures provided passes", function() {
+    $this->it( "nested attributes with no callables provided passes", function() {
 
         $user = [
             'name' => 'Lisa',
@@ -261,7 +261,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
 
     });
 
-    $this->it( "nested attributes with no closures provided fails", function() {
+    $this->it( "nested attributes with no callables provided fails", function() {
 
         $user = [
             'name' => 'Lisa',

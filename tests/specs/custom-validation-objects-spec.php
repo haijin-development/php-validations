@@ -110,8 +110,9 @@ class Custom_Validation extends Validator
 
         $prices = $this->get_value();
 
-        if( $prices['price_1'] + $prices['price_2'] == $prices['total'] )
+        if( $prices['price_1'] + $prices['price_2'] == $prices['total'] ) {
             return;
+        }
 
         $this->add_error();
     }

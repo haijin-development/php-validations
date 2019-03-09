@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use Haijin\Validations\Validator;
-use Haijin\Validations\Validation_Errors_Dictionary;
+use Haijin\Validations\Validation_Messages_Dictionary;
 
 // Collect some validations
 
@@ -11,19 +11,23 @@ $object = new stdclass();
 $object->name = '  ';
 
 $validation_errors = ( new Validator() )->validate( $object, function($user) {
+
     $user->attr( 'name' ) ->is_present() ->is_string() ->not_blank() ->length( 8, 30 );
+
 });
 
 
-/// Create a new Validation_Errors_Dictionary
+/// Create a new Validation_Messages_Dictionary
 
 // Use a dictionary with default messages
 
-$errors_dictionary = Validation_Errors_Dictionary::new_default();
+$errors_dictionary = new Validation_Messages_Dictionary();
+
+$errors_dictionary->with_default_messages();
 
 // or create a new one
 
-$errors_dictionary = new Validation_Errors_Dictionary();
+$errors_dictionary = new Validation_Messages_Dictionary();
 
 /// Define a default validation message
 
@@ -38,9 +42,12 @@ $errors_dictionary->define( function($messages) {
 // Get the validations messages
 
 foreach( $validation_errors as $error ) {
+
     $message = $errors_dictionary->message_for( $error );
+
     print( $message );
     print "\n";
+
 }
 
 /// Define more specific messages
@@ -61,7 +68,10 @@ $errors_dictionary->define( function($messages) {
 // Get the validations messages
 
 foreach( $validation_errors as $error ) {
+
     $message = $errors_dictionary->message_for( $error );
+
     print( $message );
     print "\n";
+
 }
