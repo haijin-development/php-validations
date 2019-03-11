@@ -140,7 +140,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 });
             });
 
-        }, $this);
+        });
 
         $this->expect( $this->called_counter ) ->to() ->equal( 2 );
 
@@ -182,7 +182,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 });
             });
 
-        }, $this);
+        });
 
         $this->expect( $this->called_counter ) ->to() ->equal( 3 );
 
@@ -223,7 +223,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 $address->attr('street' ) ->is_present();
             });
 
-        }, $this);
+        });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
@@ -255,7 +255,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 $address->attr('street' ) ->is_present();
             });
 
-        }, $this);
+        });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
 
@@ -287,7 +287,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 $address->attr('street' ) ->is_present();
             });
 
-        }, $this);
+        });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
@@ -326,7 +326,7 @@ $spec->describe( "When validating nested attributes in validations of associativ
                 $address->attr('street' ) ->is_present();
             });
 
-        }, $this);
+        });
 
         $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
 
