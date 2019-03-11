@@ -1,6 +1,9 @@
 <?php
 
-namespace Haijin\Validations;
+namespace Haijin\Validations\Messages;
+
+use Haijin\Validations\Validations_Exception;
+
 
 /**
  * Validations_Exception raised when trying to format a validation message for a missing valition name.

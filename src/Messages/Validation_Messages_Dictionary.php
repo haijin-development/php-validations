@@ -1,6 +1,6 @@
 <?php
 
-namespace Haijin\Validations;
+namespace Haijin\Validations\Messages;
 
 use Haijin\File_Path;
 

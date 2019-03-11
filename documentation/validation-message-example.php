@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use Haijin\Validations\Validator;
-use Haijin\Validations\Validation_Messages_Dictionary;
+use Haijin\Validations\Messages\Validation_Messages_Dictionary;
 
 // Collect some validations
 

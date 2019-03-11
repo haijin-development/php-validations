@@ -2,7 +2,7 @@
 
 use Haijin\Attribute_Path;
 use Haijin\Validations\Validation_Error;
-use Haijin\Validations\Validation_Messages_Dictionary;
+use Haijin\Validations\Messages\Validation_Messages_Dictionary;
 
 $spec->describe( "When using the default Validation_Messages_Dictionary", function() {
 

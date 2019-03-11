@@ -1,6 +1,6 @@
 <?php
 
-namespace Haijin\Validations\Validation_Messages;
+namespace Haijin\Validations\Messages;
 
 $messages->define( function($messages) {
 
@@ -115,7 +115,9 @@ $messages->define( function($messages) {
 
     /// Helper function
 
-    if( ! function_exists( '\Haijin\Validations\Validation_Messages\extract_pattern_from' ) )
+    if( ! function_exists(
+            'Haijin\Validations\Messages\extract_pattern_from' )
+        )
     {
 
         function extract_pattern_from($pattern, $validation_name)

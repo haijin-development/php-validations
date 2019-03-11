@@ -2,7 +2,8 @@
 
 use Haijin\Attribute_Path;
 use Haijin\Validations\Validation_Error;
-use Haijin\Validations\Validation_Messages_Dictionary;
+use Haijin\Validations\Messages\Validation_Messages_Dictionary;
+use Haijin\Validations\Messages\Validation_Message_Not_Found_Exception;
 
 $spec->describe( "A Validation_Messages_Dictionary", function() {
 
@@ -21,7 +22,7 @@ $spec->describe( "A Validation_Messages_Dictionary", function() {
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\Validation_Message_Not_Found_Exception',
+            Validation_Message_Not_Found_Exception::class,
             function($error) use($validation_error) {
 
                 $this->expect( $error->get_validation_error() ) ->to() ->be( "===" )
@@ -71,7 +72,7 @@ $spec->describe( "A Validation_Messages_Dictionary", function() {
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\Validation_Message_Not_Found_Exception',
+            Validation_Message_Not_Found_Exception::class,
             function($error) {
 
                 $this->expect( $error->getMessage() ) ->to()
@@ -135,7 +136,7 @@ $spec->describe( "A Validation_Messages_Dictionary", function() {
             $this->dictionary->message_for( $validation_error );
 
         }) ->to() ->raise(
-            'Haijin\Validations\Validation_Message_Not_Found_Exception',
+            Validation_Message_Not_Found_Exception::class,
             function($error) {
 
                 $this->expect( $error->getMessage() ) ->to()
