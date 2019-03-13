@@ -2,6 +2,8 @@
 
 namespace Haijin\Validations;
 
+use Haijin\Errors\Haijin_Error;
+
 /**
  * This trait has the definitions of the built in validations for the Validator class.
  */
@@ -368,7 +370,7 @@ trait Built_In_Constraints
                 break;
 
             default:
-                throw new \RuntimeException( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
+                throw new Haijin_Error( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
                 break;
         }
 

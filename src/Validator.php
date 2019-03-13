@@ -5,6 +5,7 @@ namespace Haijin\Validations;
 use Haijin\Ordered_Collection;
 use Haijin\Attribute_Path;
 use Haijin\Object_Attribute_Accessor;
+use Haijin\Errors\Haijin_Error;
 use Haijin\Validations\Halt_Validation_Exception;
 
 class Validator implements \ArrayAccess
@@ -337,7 +338,7 @@ class Validator implements \ArrayAccess
     {
         $subclass_name = get_class( $this );
 
-        throw new \RuntimeException(
+        throw new Haijin_Error(
             "'{$subclass_name}' must implement a 'public function evaluate()' with the validations for the object being validated."
         );        
     }
@@ -357,14 +358,14 @@ class Validator implements \ArrayAccess
 
     public function offsetSet( $offset , $value )
     {
-        throw new \RuntimeException(
+        throw new Haijin_Error(
             "Attribute assignment through [] is not supported."
         );
     }
 
     public function offsetUnset( $offset )
     {
-        throw new \RuntimeException(
+        throw new Haijin_Error(
             "Attribute unset() is not supported."
         );
     }
