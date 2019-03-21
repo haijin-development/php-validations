@@ -289,19 +289,24 @@ class Validator implements \ArrayAccess
      */
     public function new_validation_error($params = [])
     {
-        if( ! array_key_exists( 'value', $params ) )
+        if( ! isset( $params[ 'value' ] ) ) {
             $params['value'] = $this->get_value();
+        }
 
-        if( array_key_exists( 'attribute_path', $params ) )
-            $params['attribute_path'] = $this->_new_attribute_path( $params['attribute_path'] );
-        else
+        if( isset( $params[ 'attribute_path' ] ) ) {
+            $params['attribute_path'] =
+                $this->_new_attribute_path( $params['attribute_path'] );
+        } else {
             $params['attribute_path'] = $this->get_attribute_path();
+        }
 
-        if( ! array_key_exists( 'validation_name', $params ) )
+        if( ! isset( $params[ 'validation_name' ] ) ) {
             $params['validation_name'] = $this->get_validation_name();
+        }
 
-        if( ! array_key_exists( 'validation_parameters', $params ) )
+        if( ! isset( $params[ 'validation_parameters' ] ) ) {
             $params['validation_parameters'] = $this->get_validation_parameters();
+        }
 
         return new Validation_Error(
             $params['value'],

@@ -17,7 +17,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_present();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -73,7 +73,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->not_present();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -131,7 +131,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             throw new Haijin_Error( "is_optional should halt and this should not be executed" );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -147,7 +147,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
         $this->expect( $validator->get_value() ) ->to() ->equal( "default value" );
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
     });
 
     $this->it( "is_empty passes", function() {
@@ -160,7 +160,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_empty();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -194,7 +194,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->not_empty();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -228,7 +228,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_defined();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
 
         $object = [ 123 ];
@@ -239,7 +239,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_defined();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
 
         $object = 123;
@@ -250,7 +250,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_defined();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -359,7 +359,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_blank();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
         $object = " \t\n";
 
@@ -369,7 +369,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_blank();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -403,7 +403,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->not_blank();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -454,7 +454,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->matches('/[$]\d+\.\d\d/');
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -478,6 +478,40 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
     });
 
+    $this->it( "is_email passes", function() {
+
+        $object = 'lisa-simpson@evegreen.com';
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $object, function($obj) {
+            $obj->is_email();
+        });
+
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
+
+    });
+
+    $this->it( "is_email fails", function() {
+
+        $object = 'lisa-simpson@evegreen';
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $object, function($obj) {
+            $obj->is_email();
+        });
+
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => "lisa-simpson@evegreen",
+            'get_attribute_path()' => '',
+            'get_validation_name()' => 'is_email',
+            'get_validation_parameters()' => []
+        ]);
+
+    });
+
     /// Types constraints
 
     $this->it( "is_string passes", function() {
@@ -490,7 +524,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_string();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -524,7 +558,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_int();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -558,7 +592,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_float();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -592,7 +626,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_number();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -626,7 +660,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_boolean();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -660,7 +694,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_array();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -694,7 +728,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_object();
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -731,7 +765,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '==', 1 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -783,7 +817,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '!=', 2 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -817,7 +851,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '<', 2 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -851,7 +885,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '<=', 1 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -885,7 +919,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '>', 0 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -919,7 +953,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '>=', 1 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -953,7 +987,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '~', 9.99, 0.01 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -987,7 +1021,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is( '!~', 9.98, 0.01 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1011,6 +1045,46 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
     });
 
+    $this->it( "same_value_at passes", function() {
+
+        $object = [
+            "a" => 1,
+            "b" => 1
+        ];
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $object, function($obj) {
+            $obj ->same_value_at( 'b', 'a' );
+        });
+
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
+
+    });
+
+    $this->it( "same_value_at fails", function() {
+
+        $object = [
+            "a" => 1,
+            "b" => 2
+        ];
+
+        $validator = new Validator();
+
+        $validation_errors = $validator->validate( $object, function($obj) {
+            $obj ->same_value_at( 'b', 'a' );
+        });
+
+        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
+        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
+            'get_value()' => 2,
+            'get_attribute_path()' => 'b',
+            'get_validation_name()' => 'same_value_at',
+            'get_validation_parameters()' => [ 'a', 1 ]
+        ]);
+
+    });
+
     /// Inclussion
 
     $this->it( "has passes", function() {
@@ -1023,7 +1097,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->has( 3 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1057,7 +1131,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->has_not( 4 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1091,7 +1165,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->has_all( [ 1, 3 ] );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1125,7 +1199,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->has_any( [ 4, 3 ] );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1159,7 +1233,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->has_none( [ 4, 5 ] );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1193,7 +1267,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->is_in( [ 1, 2 ] );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1227,7 +1301,7 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->not_in( [ 1, 2 ] );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 
@@ -1261,14 +1335,14 @@ $spec->describe( "When using the built-in validation constraints", function() {
             $obj->length( 0, 3 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );        $object = 'abc';
+        $this->expect( $validation_errors ) ->to() ->equal( [] );        $object = 'abc';
 
 
         $validation_errors = $validator->validate( 'abc', function($obj) {
             $obj->length( 1, 3 );
         });
 
-        $this->expect( [] ) ->to() ->equal( $validation_errors );
+        $this->expect( $validation_errors ) ->to() ->equal( [] );
 
     });
 

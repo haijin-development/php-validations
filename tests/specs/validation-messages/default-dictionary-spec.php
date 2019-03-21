@@ -182,6 +182,23 @@ $spec->describe( "When using the default Validation_Messages_Dictionary", functi
 
     });
 
+    $this->it( "the formatted message for the is_email validation is defined", function() {
+
+        $validation_error = new Validation_Error(
+                'lisa_simpson@evergreen',
+                new Attribute_Path( 'address.street' ),
+                'is_email',
+                []
+            );
+
+        $message = $this->dictionary->message_for( $validation_error );
+
+        $expected_message = "The attribute 'address.street' is not a valid email.";
+
+        $this->expect( $message ) ->to() ->equal( $expected_message );
+
+    });
+
     $this->it( "the formatted message for the is_int validation is defined", function() {
 
         $validation_error = new Validation_Error(
@@ -414,6 +431,23 @@ $spec->describe( "When using the default Validation_Messages_Dictionary", functi
         $message = $this->dictionary->message_for( $validation_error );
 
         $expected_message = "The attribute 'address.street' must be !~ 2.";
+
+        $this->expect( $message ) ->to() ->equal( $expected_message );
+
+    });
+
+    $this->it( "the formatted message for the same_value_at validation is defined", function() {
+
+        $validation_error = new Validation_Error(
+                '123',
+                new Attribute_Path( 'password_confirmation' ),
+                'same_value_at',
+                [ 'password' ]
+            );
+
+        $message = $this->dictionary->message_for( $validation_error );
+
+        $expected_message = "The attribute 'password_confirmation' does not match the attribute 'password'.";
 
         $this->expect( $message ) ->to() ->equal( $expected_message );
 

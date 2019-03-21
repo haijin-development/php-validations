@@ -107,7 +107,7 @@ class Validation_Messages_Dictionary
     {
         $messages = $this;
 
-        require __DIR__ . "/defualt-validations-messages.php";
+        require __DIR__ . "/default-validations-messages.php";
 
         return $this;
     }

@@ -8,6 +8,10 @@ $messages->define( function($messages) {
         return "The attribute '{$validation_error->get_attribute_path()}' must match '{$validation_error->get_validation_parameters()[0]}'.";
     });
 
+    $messages->at_validation( 'is_email', function($validation_error) {
+        return "The attribute '{$validation_error->get_attribute_path()}' is not a valid email.";
+    });
+
     $messages->at_validation( '==', function($validation_error) {
         return "The attribute '{$validation_error->get_attribute_path()}' must equal {$validation_error->get_validation_parameters()[0]}.";
     });
@@ -38,6 +42,10 @@ $messages->define( function($messages) {
 
     $messages->at_validation( '!~', function($validation_error) {
         return "The attribute '{$validation_error->get_attribute_path()}' must be !~ {$validation_error->get_validation_parameters()[0]}.";
+    });
+
+    $messages->at_validation( 'same_value_at', function($validation_error) {
+        return "The attribute '{$validation_error->get_attribute_path()}' does not match the attribute '{$validation_error->get_validation_parameters()[0]}'.";
     });
 
     $messages->at_validation( 'has', function($validation_error) {

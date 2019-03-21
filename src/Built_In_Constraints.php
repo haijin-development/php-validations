@@ -181,8 +181,26 @@ trait Built_In_Constraints
 
         $value = $this->get_value();
 
-        if( ! preg_match($regex, $this->get_value() ) ){
+        if( ! preg_match($regex, $this->get_value() ) ) {
             $this->set_validation_parameters( [ $regex ] );
+            $this->add_error();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validates that the string value is formatted as a valid email.
+     *
+     * @return Validator $this object
+     */
+    public function is_email()
+    {
+        $this->set_validation_name( 'is_email' );
+
+        $value = $this->get_value();
+
+        if( ! ( new \EmailValidator\Validator() )->isEmail( $value ) ) {
             $this->add_error();
         }
 
@@ -388,17 +406,42 @@ trait Built_In_Constraints
     {
         $this->set_validation_name( 'length' );
 
-        if( is_string( $this->get_value() ) ){
+        if( is_string( $this->get_value() ) ) {
             $length = strlen( $this->get_value() );
         }
 
-        if( is_array( $this->get_value() ) ){
+        if( is_array( $this->get_value() ) ) {
             $length = count( $this->get_value() );
         }
 
         if(  $length < $min_length || $length >$max_length ) {
             $this->set_validation_parameters( [ $min_length, $max_length ] );
             $this->add_error();
+        }
+
+        return $this;
+    }
+
+    /// Validations
+
+    public function same_value_at($attribute, $another_attribute)
+    {
+        $this->set_validation_name( 'same_value_at' );
+
+        if( $this->get_value_at( $attribute )
+            !=
+            $this->get_value_at( $another_attribute )
+          )
+        {
+            $this->set_validation_parameters([ $attribute, $another_attribute ]);
+            $this->add_error([
+                'value' => $this->get_value_at( $attribute ),
+                'attribute_path' => $this->get_attribute_path()->concat( $attribute ),
+                'validation_parameters' => [
+                    $another_attribute,
+                    $this->get_value_at( $another_attribute )
+                ]
+            ]);
         }
 
         return $this;
