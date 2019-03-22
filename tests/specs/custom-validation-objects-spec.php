@@ -1,6 +1,7 @@
 <?php
 
 use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
 $spec->describe( "When using custom Validadors to perform validations", function() {
 
@@ -102,7 +103,7 @@ $spec->describe( "When using custom Validadors to perform validations", function
 });
 
 
-class Custom_Validation extends Validator
+class Custom_Validation extends Custom_Validator
 {
     public function evaluate()
     {

@@ -8,7 +8,7 @@ use Haijin\Object_Attribute_Accessor;
 use Haijin\Errors\Haijin_Error;
 use Haijin\Validations\Halt_Validation_Exception;
 
-class Validator implements \ArrayAccess
+class Validator
 {
     use \Haijin\Validations\Built_In_Constraints;
     use \Haijin\Validations\Built_In_Converters;
@@ -39,11 +39,6 @@ class Validator implements \ArrayAccess
         $this->set_errors_collection( $validator->get_errors_collection() );
 
         $this->evaluate();
-    }
-
-    public function evaluate()
-    {
-        $this->raise_missing_evaluate_method_error();
     }
 
     // Accessing
@@ -252,14 +247,6 @@ class Validator implements \ArrayAccess
     // Errors
 
     /**
-     * Adds a all the Validation_Error in $validation_errors_array to the errors collection.
-     */
-    public function add_all_errors($validation_errors_array)
-    {
-        $this->errors_collection->add_all( $validation_errors_array );
-    }
-
-    /**
      * Creates a new Validation_Error and adds it to the errors collection.
      */
     public function add_error($params = [])
@@ -335,43 +322,5 @@ class Validator implements \ArrayAccess
     protected function _new_attribute_path($attribute_path = [])
     {
         return new Attribute_Path( $attribute_path );
-    }
-
-    /// Raising errors
-
-    protected function raise_missing_evaluate_method_error()
-    {
-        $subclass_name = get_class( $this );
-
-        throw new Haijin_Error(
-            "'{$subclass_name}' must implement a 'public function evaluate()' with the validations for the object being validated."
-        );        
-    }
-
-
-    /// ArrayAccess implementation
-
-    public function offsetExists( $offset )
-    {
-        return true;
-    }
-
-    public function offsetGet( $attribute_name )
-    {
-        return $this->attr( $attribute_name );
-    }
-
-    public function offsetSet( $offset , $value )
-    {
-        throw new Haijin_Error(
-            "Attribute assignment through [] is not supported."
-        );
-    }
-
-    public function offsetUnset( $offset )
-    {
-        throw new Haijin_Error(
-            "Attribute unset() is not supported."
-        );
     }
 }

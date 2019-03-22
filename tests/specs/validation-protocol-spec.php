@@ -35,6 +35,9 @@ $spec->describe( "When using the Validator protocol", function() {
             'validation_parameters' => [1, 2]
         ]);
 
+        $this->expect( $validation_error->get_attribute_name() )
+            ->to() ->equal( 'street' );
+
         $this->expect( $validation_error ) ->to() ->be() ->exactly_like([
             'get_value()' => 123,
             'get_attribute_path()' => 'address.street',

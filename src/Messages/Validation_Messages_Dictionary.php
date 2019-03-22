@@ -275,7 +275,7 @@ class Validation_Messages_Dictionary
         if( $this->has_message_for( $validation_error ) )
             return;
 
-        $this->raise_message_not_found_error( $validation_error );
+        return $this->raise_message_not_found_error( $validation_error );
     }
 
     /**

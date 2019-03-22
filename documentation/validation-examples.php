@@ -64,10 +64,10 @@ $validator->validate( $user, function($user) {
 /// Custom validations
 
 /*
- * Reuse frequent validations in a Validator subclass:
+ * Reuse frequent validations in a Custom_Validator subclass:
  */
 
-class Address_Validator extends Validator
+class Address_Validator extends Custom_Validator
 {
     public function evaluate()
     {
@@ -102,16 +102,16 @@ $validation_errors = $validator->validate( $user, function($user) {
 
     $user->attr('last_name') ->is_defined() ->is_string();
 
-    $user->attr('address') ->is_defined() ->validate_with( 'Address_Validator' );
+    $user->attr('address') ->is_defined() ->validate_with( Address_Validator::class );
 
 });
 
 
 /**
- * Pass a Validator subclass instance instead of its name to parametrized it:
+ * Pass a Custom_Validator subclass instance instead of its name to parametrized it:
  */
 
-class Configurable_Address_Validator extends Validator
+class Configurable_Address_Validator extends Custom_Validator
 {
     public function __construct($max_length = 255)
     {
@@ -207,11 +207,11 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
  
  /**
   * Some validations involve accessing multiple attributes, invoking other validations and performing 
-  * complex calculations. In those cases write a custom Validator subclass and use its available protocol
+  * complex calculations. In those cases write a Custom_Validator subclass and use its available protocol
   * to fullfill the validation needs.
   */
 
- class Custom_Validator extends Validator
+ class Custom_Validator extends Custom_Validator
  {
     public function evaluate()
     {
@@ -327,7 +327,7 @@ $validation_errors = $validator->validate( $user, function($user) {
 /**
  * Validates a purchase object.
  */
-class Purchase_Validator extends Validator
+class Purchase_Validator extends Custom_Validator
 {
     /**
      * Validates a purchase object.
@@ -409,7 +409,7 @@ $validation_errors = $validator->validate( '1', function($n) {
  * Write a custom converter with:
  */
 
-class Increment_Converter extends Validator
+class Increment_Converter extends Custom_Validator
 {
     public function evaluate()
     {
@@ -423,11 +423,11 @@ class Increment_Converter extends Validator
 /// Adding and overriding built-in validations
 
 /**
- * Override and add built in validations defining methods in a Validator subclass and using that subclass
- * instead of Validator:
+ * Override and add built in validations defining methods in a Validator subclass and
+ * using that subclass instead of Validator:
  */
 
-class Extended_Validator extends Validator
+class Extended_Validator extends Custom_Validator
 {
     public function is_address()
     {

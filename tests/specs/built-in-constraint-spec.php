@@ -1045,6 +1045,29 @@ $spec->describe( "When using the built-in validation constraints", function() {
 
     });
 
+    $this->it( "raises an error with an unkown comparison operator", function() {
+
+        $this->expect( function() {
+
+            $object = 1;
+
+            $validator = new Validator();
+
+            $validator->validate( $object, function($obj) {
+                $obj->is( '><', 1 );
+            });
+
+        }) ->to() ->raise(
+            Haijin_Error::class,
+            function($error) {
+                $this->expect( $error->getMessage() ) ->to() ->equal(
+                    "Invalid comparison operator '><' in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]"
+                );
+            }
+        );
+
+    });
+
     $this->it( "same_value_at passes", function() {
 
         $object = [

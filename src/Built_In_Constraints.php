@@ -21,8 +21,10 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_present' );
 
         if( $this->get_value() === null ) {
+
             $this->add_error();
-            $this->halt();            
+
+            return $this->halt();            
         }
 
         return $this;
@@ -58,7 +60,7 @@ trait Built_In_Constraints
         if( $this->get_value() === null ) {
 
             if( $default_value === null ) {
-                $this->halt();
+                return $this->halt();
             }
 
             $this->set_value( $default_value );
@@ -119,7 +121,8 @@ trait Built_In_Constraints
         }
 
         $this->add_error();
-        $this->halt();
+
+        return $this->halt();
     }
 
     /// String constraints
@@ -137,10 +140,6 @@ trait Built_In_Constraints
         $value = $this->get_value();
 
         if( is_string( $value ) && trim( $value ) != '' ) {
-            $this->add_error();
-        }
-
-        if( is_array( $value ) && count( $value ) > 0 ) {
             $this->add_error();
         }
 
@@ -219,8 +218,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_string' );
 
         if( ! is_string( $this->get_value() ) ) {
+
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -236,8 +238,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_int' );
 
         if( ! is_int( $this->get_value() ) ) {
+
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -253,8 +258,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_float' );
 
         if( ! is_float( $this->get_value() ) ) {
+
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -270,8 +278,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_number' );
 
         if( ! is_numeric( $this->get_value() ) || is_string( $this->get_value() ) )  {
+            
             $this->add_error();
-            $this->halt();
+            
+            return $this->halt();
+
         }
 
         return $this;
@@ -287,8 +298,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_boolean' );
 
         if( ! is_bool( $this->get_value() ) ) {
+            
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -304,8 +318,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_array' );
 
         if( ! is_array( $this->get_value() ) ) {
+
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -321,8 +338,11 @@ trait Built_In_Constraints
         $this->set_validation_name( 'is_object' );
 
         if( ! is_object( $this->get_value() ) ) {
+
             $this->add_error();
-            $this->halt();
+
+            return $this->halt();
+
         }
 
         return $this;
@@ -388,7 +408,7 @@ trait Built_In_Constraints
                 break;
 
             default:
-                throw new Haijin_Error( "Invalid comparison operator {$comparison_string} in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
+                throw new Haijin_Error( "Invalid comparison operator '{$comparison_string}' in validation. Valid operatos are [ '==', '!=', '>', '>=', '<', '<=', '~', '!~' ]" );
                 break;
         }
 
@@ -588,25 +608,6 @@ trait Built_In_Constraints
         }
 
         $custom_validator( $this );
-
-        return $this;
-    }
-
-    /**
-     * Validates the value with a Validator instance passed as an argument.
-     *
-     * @param Validator $custom_validation A Validator instance to perform the validation.
-     *
-     * @return Validator $this Validator.
-     */
-    public function validate_with_validator($custom_validation)
-    {
-        $custom_validation->set_value( $this->get_value() );
-        $custom_validation->set_attribute_path( $this->get_attribute_path() );
-
-        $custom_validation->evaluate();
-
-        $this->add_all_errors( $custom_validation->get_errors() );
 
         return $this;
     }

@@ -229,38 +229,6 @@ $spec->describe( "When validating nested attributes in validations of associativ
 
     });
 
-    $this->it( "nested attributes using array access passes", function() {
-
-        $user = [
-            'name' => 'Lisa',
-            'last_name' => 'Simpson',
-            'address' => [
-                'street' => 'Evergreen 742'
-            ]
-        ];
-
-        $validator = new Validator();
-
-        $this->called_counter = 0;
-
-        $validation_errors = $validator->validate( $user, function($user) {
-
-            $user[ 'name' ] ->is_present();
-
-            $user[ 'last_name' ] ->is_present();
-
-            $user[ 'address' ] ->eval( function($address) {
-                $address->is_present();
-
-                $address->attr('street' ) ->is_present();
-            });
-
-        });
-
-        $this->expect( count($validation_errors) ) ->to() ->equal( 0 );
-
-    });
-
     $this->it( "nested attributes with no callables provided fails", function() {
 
         $user = [
@@ -282,45 +250,6 @@ $spec->describe( "When validating nested attributes in validations of associativ
             $user->attr( 'last_name' ) ->is_present();
 
             $user->attr( 'address', function($address) {
-                $address->is_present();
-
-                $address->attr('street' ) ->is_present();
-            });
-
-        });
-
-        $this->expect( count($validation_errors) ) ->to() ->equal( 1 );
-
-        $this->expect( $validation_errors[0] ) ->to() ->be() ->exactly_like([
-            'get_value()' => null,
-            'get_attribute_path()' => 'address.street',
-            'get_validation_name()' => 'is_present',
-            'get_validation_parameters()' => []
-        ]);
-
-    });
-
-    $this->it( "nested attributes with array access fails", function() {
-
-        $user = [
-            'name' => 'Lisa',
-            'last_name' => 'Simpson',
-            'address' => [
-                'street' => null
-            ]
-        ];
-
-        $validator = new Validator();
-
-        $this->called_counter = 0;
-
-        $validation_errors = $validator->validate( $user, function($user) {
-
-            $user[ 'name' ] ->is_present();
-
-            $user['last_name' ] ->is_present();
-
-            $user[ 'address' ] ->eval( function($address) {
                 $address->is_present();
 
                 $address->attr('street' ) ->is_present();

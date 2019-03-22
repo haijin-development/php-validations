@@ -141,12 +141,12 @@ $validation_errors = $validator->get_errors();
 <a name="c-2-2"></a>
 ### Custom validations
 
-Reuse frequent validations in a Validator subclass and use it in the object validation:
+Reuse frequent validations in a Custom_Validator subclass and use it in the object validation:
 
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Address_Validator extends Validator
+class Address_Validator extends Custom_Validator
 {
     public function evaluate()
     {
@@ -194,9 +194,9 @@ $validation_errors = $validator->validate( $user, function($user) {
 Pass a Custom_Validator instance instead of its name to parametrize it:
 
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Configurable_Address_Validator extends Validator
+class Configurable_Address_Validator extends Custom_Validator
 {
     public function __construct($max_length = 255)
     {
@@ -301,9 +301,9 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
 Some complex validations involve accessing multiple attributes, invoking other validations and performing calculations. In those cases write a custom Validator subclass and use its available protocol.
 
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Custom_Validator extends Validator
+class A_Custom_Validator extends Custom_Validator
 {
     public function evaluate()
     {
@@ -423,12 +423,12 @@ $validation_errors = $validator->validate( $user, function($user) {
 <a name="c-2-7"></a>
 ### Custom validator example
 
-This Validator validates a purchase object:
+This Custom_Validator validates a purchase object:
 
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Purchase_Validator extends Validator
+class Purchase_Validator extends Custom_Validator
 {
     /**
      * Validates a purchase object.
@@ -518,9 +518,9 @@ $validation_errors = $validator->validate( '1', function($n) {
 Write a custom converter with:
 
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Increment_Converter extends Validator
+class Increment_Converter extends Custom_Validator
 {
     public function evaluate()
     {
@@ -534,12 +534,12 @@ class Increment_Converter extends Validator
 <a name="c-5"></a>
 ## Adding and overriding built-in validations and converters
 
-Override and add built in validations defining methods in a Validator subclass and using that subclass instead of Validator:
+Override and add built in validations defining methods in a Custom_Validator subclass and using that subclass instead of Custom_Validator:
  
 ```php
-use Haijin\Validations\Validator;
+use Haijin\Validations\Custom_Validator;
 
-class Extended_Validator extends Validator
+class Extended_Validator extends Custom_Validator
 {
     public function is_address()
     {
