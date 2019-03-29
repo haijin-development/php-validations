@@ -27,7 +27,7 @@ class Validator
         $this->attribute_path = $this->_new_attribute_path();
         $this->validation_name = null;
         $this->validation_parameters = [];
-        $this->errors_collection = new Ordered_Collection();
+        $this->reset_errors();
     }
 
     /// Callable protocol
@@ -40,6 +40,12 @@ class Validator
 
         $this->evaluate();
     }
+
+    public function reset_errors()
+    {
+        $this->errors_collection = new Ordered_Collection();
+    }
+
 
     // Accessing
 
@@ -176,6 +182,8 @@ class Validator
      */
     public function validate($value, $validation_callable)
     {
+        $this->reset_errors();
+
         $this->set_value( $value );
 
         $this->_isolate( $validation_callable );
@@ -237,8 +245,7 @@ class Validator
         {
             $this->eval( $validation_callable );
 
-        } catch( Halt_Validation_Exception $e )
-        {
+        } catch( Halt_Validation_Exception $e ) {
         }
 
         return $this;
