@@ -2,7 +2,7 @@
 
 namespace Haijin\Validations;
 
-abstract class Custom_Validator extends Validator
+abstract class CustomValidator extends Validator
 {
     abstract public function evaluate();
 }

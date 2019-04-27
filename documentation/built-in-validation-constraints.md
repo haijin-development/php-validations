@@ -3,125 +3,125 @@
 ## Table of contents
 
 1. [Presence constraints](#c-1)
-    1. [is_present()](#c-1-1)
-    2. [not_present()](#c-1-2)
-    3. [is_optional($default_value = null)](#c-1-3)
-    4. [is_empty()](#c-1-4)
-    5. [not_empty()](#c-1-5)
-    6. [is_defined()](#c-1-6)
+    1. [isPresent()](#c-1-1)
+    2. [notPresent()](#c-1-2)
+    3. [isOptional($defaultValue = null)](#c-1-3)
+    4. [isEmpty()](#c-1-4)
+    5. [notEmpty()](#c-1-5)
+    6. [isDefined()](#c-1-6)
 2. [String constraints](#c-2)
-    1. [is_blank()](#c-2-1)
-    2. [not_blank()](#c-2-2)
+    1. [isBlank()](#c-2-1)
+    2. [notBlank()](#c-2-2)
     3. [matches($regex)](#c-2-3)
 3. [Type constraints](#c-3)
-    1. [is_string()](#c-3-1)
-    2. [is_int()](#c-3-2)
-    3. [is_float()](#c-3-3)
-    4. [is_number()](#c-3-4)
-    5. [is_boolean()](#c-3-5)
-    6. [is_array()](#c-3-6)
-    7. [is_object()](#c-3-7)
+    1. [isString()](#c-3-1)
+    2. [isInt()](#c-3-2)
+    3. [isFloat()](#c-3-3)
+    4. [isNumber()](#c-3-4)
+    5. [isBoolean()](#c-3-5)
+    6. [isArray()](#c-3-6)
+    7. [isObject()](#c-3-7)
 4. [Comparison constraints](#c-4)
-    1. [is( '==', $another_value )](#c-4-1)
-    2. [is( '!=', $another_value )](#c-4-2)
-    3. [is( '>', $another_value )](#c-4-3)
-    4. [is( '>=', $another_value )](#c-4-4)
-    5. [is( '<', $another_value )](#c-4-5)
-    6. [is( '<=', $another_value )](#c-4-6)
-    7. [is( '~', $another_value, $precision )](#c-4-7)
-    8. [is( '!~', $another_value, $precision )](#c-4-8)
+    1. [is( '==', $anotherValue )](#c-4-1)
+    2. [is( '!=', $anotherValue )](#c-4-2)
+    3. [is( '>', $anotherValue )](#c-4-3)
+    4. [is( '>=', $anotherValue )](#c-4-4)
+    5. [is( '<', $anotherValue )](#c-4-5)
+    6. [is( '<=', $anotherValue )](#c-4-6)
+    7. [is( '~', $anotherValue, $precision )](#c-4-7)
+    8. [is( '!~', $anotherValue, $precision )](#c-4-8)
     9. [length( $min, $max )](#c-4-9)
 5. [Inclusion contraints](#c-5)
-    1. [is_in( $values_collection )](#c-5-1)
-    2. [not_in( $values_collection )](#c-5-2)
-    3. [has( $another_value )](#c-5-2)
-    4. [has_not( $another_value )](#c-5-3)
-    5. [has_all( $values_collection )](#c-5-4)
-    6. [has_any( $values_collection )](#c-5-5)
-    7. [has_none( $values_collection )](#c-5-6)
+    1. [isIn( $valuesCollection )](#c-5-1)
+    2. [notIn( $valuesCollection )](#c-5-2)
+    3. [has( $anotherValue )](#c-5-2)
+    4. [hasNot( $anotherValue )](#c-5-3)
+    5. [hasAll( $valuesCollection )](#c-5-4)
+    6. [hasAny( $valuesCollection )](#c-5-5)
+    7. [hasNone( $valuesCollection )](#c-5-6)
 6. [Converters](#c-6)
-    1. [as_string()](#c-6-1)
-    2. [as_int()](#c-6-2)
-    3. [as_float()](#c-6-3)
-    4. [as_boolean](#c-6-4)
+    1. [asString()](#c-6-1)
+    2. [asInt()](#c-6-2)
+    3. [asFloat()](#c-6-3)
+    4. [asBoolean](#c-6-4)
 
 <a name="c-1"></a>
 ## Presence constraints
 
 <a name="c-1-1"></a>
-### is_present()
+### isPresent()
 
 Fails if the value is null.
 
 Usage
 
 ```php
-$object->is_present()
+$object->isPresent()
 ```
 
 Halts on failure.
 
 <a name="c-1-2"></a>
-### not_present()
+### notPresent()
 
 Fails if the value is not null.
 
 Usage
 
 ```php
-$object->not_present()
+$object->notPresent()
 ```
 
 Halts on failure.
 
 <a name="c-1-3"></a>
-### is_optional($default_value = null)
+### isOptional($defaultValue = null)
 
-If no $default_value is given halts if the validated value is null.
+If no $defaultValue is given halts if the validated value is null.
 
-If a $default_value is given and the validated value is null sets the $default_value.
+If a $defaultValue is given and the validated value is null sets the $defaultValue.
 
-It does not add any Validation_Error in any case.
+It does not add any ValidationError in any case.
 
 Usage
 
 ```php
-$object->is_optional()
+$object->isOptional()
 
-$object->is_optional( 10 )
+$object->isOptional( 10 )
 ```
 
 <a name="c-1-4"></a>
-### is_empty()
+### isEmpty()
 
 Fails if the array value is not empty.
 
 Usage
 
 ```php
-$object->is_empty()
+$object->isEmpty()
 ```
 
 <a name="c-1-5"></a>
-### not_empty()
+### notEmpty()
 
 Fails if the array value is empty.
 
 Usage
 
 ```php
-$object->not_empty()
+$object->notEmpty()
 ```
 
 <a name="c-1-6"></a>
-### is_defined()
+### isDefined()
 
 Fails if the value is null or is blank.
 
 Usage
 
 ```php
-$object->is_defined()
+$object->isDefined()
 ```
 
 Halts on failure.
@@ -130,7 +130,7 @@ Halts on failure.
 ## String constraints
 
 <a name="c-2-1"></a>
-### is_blank()
+### isBlank()
 
 Fails if the value is not blank.
 
@@ -139,11 +139,11 @@ A blank string is empty or composed by any number of spaces, tabs and/or carriag
 Usage
 
 ```php
-$object->is_blank()
+$object->isBlank()
 ```
 
 <a name="c-2-2"></a>
-### not_blank()
+### notBlank()
 
 Fails if the value is blank.
 
@@ -152,7 +152,7 @@ A blank string is empty or composed by any number of spaces, tabs and/or carriag
 Usage
 
 ```php
-$object->not_blank()
+$object->notBlank()
 ```
 
 <a name="c-2-3"></a>
@@ -170,92 +170,92 @@ $object->matches( '/.*/' )
 ## Type constraints
 
 <a name="c-3-1"></a>
-### is_string()
+### isString()
 
 Fails if the value is not a string.
 
 Usage
 
 ```php
-$object->is_string()
+$object->isString()
 ```
 
 Halts on failure.
 
 <a name="c-3-2"></a>
-### is_int()
+### isInt()
 
 Fails if the value is not an integer.
 
 Usage
 
 ```php
-$object->is_int()
+$object->isInt()
 ```
 
 Halts on failure.
 
 <a name="c-3-3"></a>
-### is_float()
+### isFloat()
 
 Fails if the value is not a float.
 
 Usage
 
 ```php
-$object->is_float()
+$object->isFloat()
 ```
 
 Halts on failure.
 
 <a name="c-3-4"></a>
-### is_number()
+### isNumber()
 
 Fails if the value is not an integer or a float.
 
 Usage
 
 ```php
-$object->is_number()
+$object->isNumber()
 ```
 
 Halts on failure.
 
 <a name="c-3-5"></a>
-### is_boolean()
+### isBoolean()
 
 Fails if the value is not a boolean.
 
 Usage
 
 ```php
-$object->is_boolean()
+$object->isBoolean()
 ```
 
 Halts on failure.
 
 <a name="c-3-6"></a>
-### is_array()
+### isArray()
 
 Fails if the value is not an array.
 
 Usage
 
 ```php
-$object->is_array()
+$object->isArray()
 ```
 
 Halts on failure.
 
 <a name="c-3-7"></a>
-### is_object()
+### isObject()
 
 Fails if the value is not an object.
 
 Usage
 
 ```php
-$object->is_object()
+$object->isObject()
 ```
 
 Halts on failure.
@@ -264,7 +264,7 @@ Halts on failure.
 ## Comparison constraints
 
 <a name="c-4-1"></a>
-### is( '==', $another_value )
+### is( '==', $anotherValue )
 
 Fails if the value is not == to another value.
 
@@ -275,7 +275,7 @@ $object->is( '==', 1 )
 ```
 
 <a name="c-4-2"></a>
-### is( '!=', $another_value )
+### is( '!=', $anotherValue )
 
 Fails if the value is not != to another value.
 
@@ -286,7 +286,7 @@ $object->is( '!=', 1 )
 ```
 
 <a name="c-4-3"></a>
-### is( '>', $another_value )
+### is( '>', $anotherValue )
 
 Fails if the value is not > to another value.
 
@@ -297,7 +297,7 @@ $object->is( '>', 1 )
 ```
 
 <a name="c-4-4"></a>
-### is( '>=', $another_value )
+### is( '>=', $anotherValue )
 
 Fails if the value is not >= to another value.
 
@@ -308,7 +308,7 @@ $object->is( '>=', 1 )
 ```
 
 <a name="c-4-5"></a>
-### is( '<', $another_value )
+### is( '<', $anotherValue )
 
 Fails if the value is not < to another value.
 
@@ -319,7 +319,7 @@ $object->is( '<', 1 )
 ```
 
 <a name="c-4-6"></a>
-### is( '<=', $another_value )
+### is( '<=', $anotherValue )
 
 Fails if the value is not <= to another value.
 
@@ -330,11 +330,11 @@ $object->is( '<=', 1 )
 ```
 
 <a name="c-4-7"></a>
-### is( '~', $another_value, $precision )
+### is( '~', $anotherValue, $precision )
 
 Fails if the value is not aproximatly equal to another value with a given precision.
 
-To check for equality is used `abs( value - $another_value ) <= $precision`.
+To check for equality is used `abs( value - $anotherValue ) <= $precision`.
 
 Usage
 
@@ -343,11 +343,11 @@ $object->is( '~', 10.00, 0.01 )
 ```
 
 <a name="c-4-8"></a>
-### is( '!~', $another_value, $precision )
+### is( '!~', $anotherValue, $precision )
 
 Fails if the value is aproximatly equal to another value with a given precision.
 
-To check for equality is used `abs( value - $another_value ) <= $precision`.
+To check for equality is used `abs( value - $anotherValue ) <= $precision`.
 
 Usage
 
@@ -379,29 +379,29 @@ $object->length( 0, null )
 ## Inclusion contraints
 
 <a name="c-5-1"></a>
-### is_in( $values_collection )
+### isIn( $valuesCollection )
 
 Fails if the value is not included in the collection.
 
 Usage
 
 ```php
-$object->is_in( [ 'active', 'inactive' ] )
+$object->isIn( [ 'active', 'inactive' ] )
 ```
 
 <a name="c-5-2"></a>
-### not_in( $values_collection )
+### notIn( $valuesCollection )
 
 Fails if the value is included in the collection.
 
 Usage
 
 ```php
-$object->not_in( [ 'active', 'inactive' ] )
+$object->notIn( [ 'active', 'inactive' ] )
 ```
 
 <a name="c-5-3"></a>
-### has( $another_value )
+### has( $anotherValue )
 
 For array values only.
 
@@ -414,7 +414,7 @@ $object->has( 0 )
 ```
 
 <a name="c-5-4"></a>
-### has_not( $another_value )
+### hasNot( $anotherValue )
 
 For array values only.
 
@@ -423,53 +423,53 @@ Fails if the value includes a constant.
 Usage
 
 ```php
-$object->has_not( 0 )
+$object->hasNot( 0 )
 ```
 
 <a name="c-5-5"></a>
-### has_all( $values_collection )
+### hasAll( $valuesCollection )
 
 For array values only.
 
-Fails if the value does not include all the values in a values_collection.
+Fails if the value does not include all the values in a valuesCollection.
 
 Usage
 
 ```php
-$object->has_all( [ 1, 2, 3 ] )
+$object->hasAll( [ 1, 2, 3 ] )
 ```
 
 <a name="c-5-6"></a>
-### has_any( $values_collection )
+### hasAny( $valuesCollection )
 
 For array values only.
 
-Fails if the value does not include any the values in a values_collection.
+Fails if the value does not include any the values in a valuesCollection.
 
 Usage
 
 ```php
-$object->has_any( [ 1, 2, 3 ] )
+$object->hasAny( [ 1, 2, 3 ] )
 ```
 
 <a name="c-5-7"></a>
-### has_none( $values_collection )
+### hasNone( $valuesCollection )
 
 For array values only.
 
-Fails if the value includes any of the values in a values_collection.
+Fails if the value includes any of the values in a valuesCollection.
 
 Usage
 
 ```php
-$object->has_none( [ 1, 2, 3 ] )
+$object->hasNone( [ 1, 2, 3 ] )
 ```
 
 <a name="c-6"></a>
 ## Converters
 
 <a name="c-6-1"></a>
-### as_string()
+### asString()
 
 Converts the validated value to a string.
 
@@ -478,13 +478,13 @@ Convertion is done using `(string)` cast.
 Usage
 
 ```php
-$object->as_string()
+$object->asString()
 ```
 
 Subsequent validations will use the converted value.
 
 <a name="c-6-2"></a>
-### as_int()
+### asInt()
 
 Converts the validated value to an integer.
 
@@ -493,13 +493,13 @@ Convertion is done using `(int)` cast.
 Usage
 
 ```php
-$object->as_int()
+$object->asInt()
 ```
 
 Subsequent validations will use the converted value.
 
 <a name="c-6-3"></a>
-### as_float()
+### asFloat()
 
 Converts the validated value to a float.
 
@@ -508,13 +508,13 @@ Convertion is done using `(float)` cast.
 Usage
 
 ```php
-$object->as_float()
+$object->asFloat()
 ```
 
 Subsequent validations will use the converted value.
 
 <a name="c-6-4"></a>
-### as_boolean
+### asBoolean
 
 Converts the validated value to a boolean.
 
@@ -523,7 +523,7 @@ Convertion is done using `(boolean)` cast.
 Usage
 
 ```php
-$object->as_boolean()
+$object->asBoolean()
 ```
 
 Subsequent validations will use the converted value.

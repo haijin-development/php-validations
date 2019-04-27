@@ -1,49 +1,57 @@
 {
-    "minumum-stability": "dev",
-    "name": "haijin/validations",
-    "description": "Framework to easily validate objects and attributes using a simple and expressive DSL.",
-    "keywords": ["validation", "expectation", "assertion", "DSL"],
-    "type": "library",
-    "license": "MIT",
-    "homepage": "https://github.com/haijin-development/php-validations",
-    "authors": [
-        {
-            "name": "Haijin Development",
-            "email": "haijin.development@gmail.com",
-            "homepage": "https://github.com/haijin-development",
-            "role": "developer"
-        }
-    ],
-    "repositories": {
-        "haijin/specs": {
-            "type": "path",
-            "url": "../php-specs",
-            "options": {
-            "symlink": true
-            }
-        },
-        "haijin/tools": {
-            "type": "path",
-            "url": "../php-tools",
-            "options": {
-            "symlink": true
-            }
-        }
-    },
-    "require": {
-        "php": ">=7.1.0",
-        "haijin/tools": "dev-development",
-        "nojacko/email-validator": "~1.0"
-    },
-    "require-dev": {
-        "haijin/specs": "dev-development"
-    },
-    "autoload": {
-        "psr-4": {
-            "Haijin\\Validations\\": ["src/"]
-        }
-    },
-    "scripts": {
-        "specs": "php ./vendor/bin/specs"
+  "minumum-stability": "dev",
+  "name": "haijin/validations",
+  "description": "Framework to easily validate objects and attributes using a simple and expressive DSL.",
+  "keywords": [
+    "validation",
+    "expectation",
+    "assertion",
+    "DSL"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/haijin-development/php-validations",
+  "authors": [
+    {
+      "name": "Haijin Development",
+      "email": "haijin.development@gmail.com",
+      "homepage": "https://github.com/haijin-development",
+      "role": "developer"
     }
+  ],
+  "repositories": {
+    "haijin/specs": {
+      "type": "path",
+      "url": "../php-specs",
+      "options": {
+        "symlink": true
+      }
+    },
+    "haijin/tools": {
+      "type": "path",
+      "url": "../php-tools",
+      "options": {
+        "symlink": true
+      }
+    }
+  },
+  "require": {
+    "php": ">=7.1.0",
+    "haijin/tools": "dev-development",
+    "nojacko/email-validator": "~1.0"
+  },
+  "require-dev": {
+    "haijin/specs": "dev-development",
+    "phpunit/php-code-coverage": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Haijin\\Validations\\": [
+        "src/"
+      ]
+    }
+  },
+  "scripts": {
+    "specs": "php ./vendor/bin/specs"
+  }
 }

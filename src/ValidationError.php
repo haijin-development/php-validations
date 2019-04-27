@@ -13,7 +13,7 @@ namespace Haijin\Validations;
  * application, not this library. The application or another library should format the appropiate message
  * to the end user from the information in this object.
  */
-class Validation_Error
+class ValidationError
 {
     /**
      * The validated value.
@@ -23,34 +23,34 @@ class Validation_Error
     /**
      * The path from the root object to the validated attribute.
      */
-    protected $attribute_path;
+    protected $attributePath;
 
     /**
      * The name of the validation that failed.
      */
-    protected $validation_name;
+    protected $validationName;
 
     /**
      * An array with the validation parameters, if any.
      */
-    protected $validation_parameters;
+    protected $validationParameters;
 
     /// Initializing
 
     /**
-     * Initializes the Validation_Error object.
+     * Initializes the ValidationError object.
      *
      * @param object $value The validated value.
-     * @param Attribute_Path $attribute_path The path from the root object to the validated nested attribute.
-     * @param string $validation_name The name of the validation that failed.
-     * @param array $validation_parameters An array with the validation parameters, if any.
+     * @param AttributePath $attributePath The path from the root object to the validated nested attribute.
+     * @param string $validationName The name of the validation that failed.
+     * @param array $validationParameters An array with the validation parameters, if any.
      */
-    public function __construct($value, $attribute_path, $validation_name, $validation_parameters = [])
+    public function __construct($value, $attributePath, $validationName, $validationParameters = [])
     {
         $this->value = $value;
-        $this->attribute_path = $attribute_path;
-        $this->validation_name = $validation_name;
-        $this->validation_parameters = $validation_parameters;
+        $this->attributePath = $attributePath;
+        $this->validationName = $validationName;
+        $this->validationParameters = $validationParameters;
     }
 
     /// Accessing
@@ -60,7 +60,7 @@ class Validation_Error
      *
      * @return object The validated value.
      */
-    public function get_value()
+    public function getValue()
     {
         return $this->value;
     }
@@ -70,9 +70,9 @@ class Validation_Error
      *
      * @return object The path from the root object to the validated nested attribute.
      */
-    public function get_attribute_path()
+    public function getAttributePath()
     {
-        return $this->attribute_path;
+        return $this->attributePath;
     }
 
     /**
@@ -80,9 +80,9 @@ class Validation_Error
      *
      * @return object The name of the validation that failed.
      */
-    public function get_validation_name()
+    public function getValidationName()
     {
-        return $this->validation_name;
+        return $this->validationName;
     }
 
     /**
@@ -90,9 +90,9 @@ class Validation_Error
      *
      * @return object An array with the validation parameters, if any.
      */
-    public function get_validation_parameters()
+    public function getValidationParameters()
     {
-        return $this->validation_parameters;
+        return $this->validationParameters;
     }
 
     /**
@@ -100,8 +100,8 @@ class Validation_Error
      *
      * @return string The name of the attribute.
      */
-    public function get_attribute_name()
+    public function getAttributeName()
     {
-        return $this->attribute_path->get_last_attribute();
+        return $this->attributePath->getLastAttribute();
     }
 }

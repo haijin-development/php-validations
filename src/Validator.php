@@ -2,48 +2,46 @@
 
 namespace Haijin\Validations;
 
-use Haijin\Ordered_Collection;
-use Haijin\Attribute_Path;
-use Haijin\Object_Attribute_Accessor;
-use Haijin\Errors\Haijin_Error;
-use Haijin\Validations\Halt_Validation_Exception;
+use Haijin\AttributePath;
+use Haijin\ObjectAttributeAccessor;
+use Haijin\OrderedCollection;
 
 class Validator
 {
-    use \Haijin\Validations\Built_In_Constraints;
-    use \Haijin\Validations\Built_In_Converters;
+    use \Haijin\Validations\BuiltInConstraints;
+    use \Haijin\Validations\BuiltInConverters;
 
     protected $value;
-    protected $attribute_path;
-    protected $validation_name;
-    protected $validation_parameters;
-    protected $errors_collection;
+    protected $attributePath;
+    protected $validationName;
+    protected $validationParameters;
+    protected $errorsCollection;
 
     /// Initializing
 
     public function __construct()
     {
         $this->value = null;
-        $this->attribute_path = $this->_new_attribute_path();
-        $this->validation_name = null;
-        $this->validation_parameters = [];
-        $this->reset_errors();
+        $this->attributePath = $this->_newAttributePath();
+        $this->validationName = null;
+        $this->validationParameters = [];
+        $this->resetErrors();
     }
 
     /// Callable protocol
 
     public function __invoke($validator)
     {
-        $this->set_value( $validator->get_value() );
-        $this->set_attribute_path( $validator->get_attribute_path() );
-        $this->set_errors_collection( $validator->get_errors_collection() );
+        $this->setValue($validator->getValue());
+        $this->setAttributePath($validator->getAttributePath());
+        $this->setErrorsCollection($validator->getErrorsCollection());
 
         $this->evaluate();
     }
 
-    public function reset_errors()
+    public function resetErrors()
     {
-        $this->errors_collection = new Ordered_Collection();
+        $this->errorsCollection = new OrderedCollection();
     }
 
 
@@ -52,7 +50,7 @@ class Validator
     /**
      * Returns the value of the attribute being validated.
      */
-    public function get_value()
+    public function getValue()
     {
         return $this->value;
     }
@@ -61,7 +59,7 @@ class Validator
      * Sets the value of the attribute being validated.
      * Returns $this so setters can be chained.
      */
-    public function set_value($value)
+    public function setValue($value)
     {
         $this->value = $value;
 
@@ -71,106 +69,106 @@ class Validator
     /**
      * Returns the path of the attribute being validated.
      */
-    public function get_attribute_path()
+    public function getAttributePath()
     {
-        return $this->attribute_path;        
+        return $this->attributePath;
     }
 
     /**
-     * Sets the attribute_path of the attribute being validated.
+     * Sets the attributePath of the attribute being validated.
      */
-    public function set_attribute_path($attribute_path)
+    public function setAttributePath($attributePath)
     {
-        $this->attribute_path = $this->_new_attribute_path( $attribute_path );
+        $this->attributePath = $this->_newAttributePath($attributePath);
 
         return $this;
     }
 
     /**
-     * Returns the collection of collected Validation_Errors.
+     * Returns the collection of collected ValidationErrors.
      */
-    public function get_errors()
+    public function getErrors()
     {
-        return $this->errors_collection->to_array();
+        return $this->errorsCollection->toArray();
     }
 
     /**
-     * Gets the errors_collection.
+     * Gets the errorsCollection.
      * Returns $this.
      */
-    public function get_errors_collection()
+    public function getErrorsCollection()
     {
-        return $this->errors_collection;
+        return $this->errorsCollection;
     }
 
     /**
-     * Sets the errors_collection.
+     * Sets the errorsCollection.
      * Returns $this.
      */
-    public function set_errors_collection($errors_collection)
+    public function setErrorsCollection($errorsCollection)
     {
-        $this->errors_collection = $errors_collection;
+        $this->errorsCollection = $errorsCollection;
 
         return $this;
     }
 
     /**
-     * Returns the validation_name.
+     * Returns the validationName.
      */
-    public function get_validation_name()
+    public function getValidationName()
     {
-        return $this->validation_name;
+        return $this->validationName;
     }
 
     /**
-     * Sets the validation_name.
+     * Sets the validationName.
      * Returns $this.
      */
-    public function set_validation_name($validation_name)
+    public function setValidationName($validationName)
     {
-        $this->validation_name = $validation_name;
+        $this->validationName = $validationName;
 
-        return $this;        
+        return $this;
     }
 
     /**
-     * Returns the validation_parameters.
+     * Returns the validationParameters.
      */
-    public function get_validation_parameters()
+    public function getValidationParameters()
     {
-        return $this->validation_parameters;
+        return $this->validationParameters;
     }
 
     /**
-     * Sets the validation_parameters.
+     * Sets the validationParameters.
      * Returns $this.
      */
-    public function set_validation_parameters($validation_parameters)
+    public function setValidationParameters($validationParameters)
     {
-        $this->validation_parameters = $validation_parameters;
+        $this->validationParameters = $validationParameters;
 
-        return $this;        
+        return $this;
     }
 
     /// Accessing nested attributes
 
 
     /**
-     * Returns the value of the attribute at $attribute_chain starting at the current $this->value.
+     * Returns the value of the attribute at $attributeChain starting at the current $this->value.
      *
      * This method is usefull in validations that need to compare or validate other values than
      * $this->value. For instance, when validating that partial sums equals a total.
      *
-     * @param string|array|Attribute_Path $attribute_chain The attribute path to the value.
+     * @param string|array|AttributePath $attributeChain The attribute path to the value.
      *
      * @return object The value read from $this->value following the attribute chain.
      */
-    public function get_value_at($attribute_chain)
+    public function getValueAt($attributeChain)
     {
-        $value = $this->get_value();
-        $accessor = new Object_Attribute_Accessor( $value );
+        $value = $this->getValue();
+        $accessor = new ObjectAttributeAccessor($value);
 
-        return $accessor->get_value_at_if_absent( $attribute_chain, null );
+        return $accessor->getValueAtIfAbsent($attributeChain, null);
     }
 
     // Validation DSL
@@ -180,15 +178,15 @@ class Validator
      *
      * Returns an array with all the validation errors collected.
      */
-    public function validate($value, $validation_callable)
+    public function validate($value, $validationCallable)
     {
-        $this->reset_errors();
+        $this->resetErrors();
 
-        $this->set_value( $value );
+        $this->setValue($value);
 
-        $this->_isolate( $validation_callable );
+        $this->_isolate($validationCallable);
 
-        return $this->get_errors();
+        return $this->getErrors();
     }
 
     /**
@@ -196,40 +194,40 @@ class Validator
      *
      * Returns $this Validator.
      */
-    public function eval($validation_callable)
+    public function eval($validationCallable)
     {
-        $validation_callable( $this );
+        $validationCallable($this);
 
         return $this;
     }
 
-    public function attr($attribute_name, $validation_callable = null)
+    public function attr($attributeName, $validationCallable = null)
     {
-        $nested_value = $this->get_value_at( $attribute_name );
+        $nestedValue = $this->getValueAt($attributeName);
 
-        $nested_validation = $this->new_validator();
-        $nested_validation->set_value( $nested_value );
-        $nested_validation->set_attribute_path(
-            $this->get_attribute_path()->concat( $attribute_name )
+        $nestedValidation = $this->newValidator();
+        $nestedValidation->setValue($nestedValue);
+        $nestedValidation->setAttributePath(
+            $this->getAttributePath()->concat($attributeName)
         );
-        $nested_validation->set_errors_collection( $this->errors_collection );
+        $nestedValidation->setErrorsCollection($this->errorsCollection);
 
-        if( $validation_callable !== null ) {
-            $nested_validation->_isolate( $validation_callable );
+        if ($validationCallable !== null) {
+            $nestedValidation->_isolate($validationCallable);
         }
 
-        $this->value = ( new Object_Attribute_Accessor( $this->value ) )
-                ->set_value_at( $attribute_name, $nested_validation->get_value() );
+        $this->value = (new ObjectAttributeAccessor($this->value))
+            ->setValueAt($attributeName, $nestedValidation->getValue());
 
-        return $nested_validation;
+        return $nestedValidation;
     }
 
-    public function each( $each_item_validation_callable )
+    public function each($eachItemValidationCallable)
     {
-        foreach( $this->get_value() as $index => $item) {
-            $attribute_name = "[" . $index . "]";
+        foreach ($this->getValue() as $index => $item) {
+            $attributeName = "[" . $index . "]";
 
-            $this->attr( $attribute_name, $each_item_validation_callable );
+            $this->attr($attributeName, $eachItemValidationCallable);
         }
     }
 
@@ -239,13 +237,12 @@ class Validator
      *
      * Returns $this Validator.
      */
-    protected function _isolate($validation_callable)
+    protected function _isolate($validationCallable)
     {
-        try
-        {
-            $this->eval( $validation_callable );
+        try {
+            $this->eval($validationCallable);
 
-        } catch( Halt_Validation_Exception $e ) {
+        } catch (HaltValidationException $e) {
         }
 
         return $this;
@@ -254,19 +251,19 @@ class Validator
     // Errors
 
     /**
-     * Creates a new Validation_Error and adds it to the errors collection.
+     * Creates a new ValidationError and adds it to the errors collection.
      */
-    public function add_error($params = [])
+    public function addError($params = [])
     {
-        $this->add_validation_error( $this->new_validation_error($params) );
+        $this->addValidationError($this->newValidationError($params));
     }
 
     /**
-     * Adds a Validation_Error to the errors collection.
+     * Adds a ValidationError to the errors collection.
      */
-    public function add_validation_error($validation_error)
+    public function addValidationError($validationError)
     {
-        $this->errors_collection->add( $validation_error );
+        $this->errorsCollection->add($validationError);
     }
 
     /**
@@ -274,60 +271,60 @@ class Validator
      */
     public function halt()
     {
-        throw new Halt_Validation_Exception();
+        throw new HaltValidationException();
     }
 
     /**
-     * Creates and returns a new Validation_Error.
-     * Does not add the Validation_Error to the errors collection.
+     * Creates and returns a new ValidationError.
+     * Does not add the ValidationError to the errors collection.
      */
-    public function new_validation_error($params = [])
+    public function newValidationError($params = [])
     {
-        if( ! isset( $params[ 'value' ] ) ) {
-            $params['value'] = $this->get_value();
+        if (!isset($params['value'])) {
+            $params['value'] = $this->getValue();
         }
 
-        if( isset( $params[ 'attribute_path' ] ) ) {
-            $params['attribute_path'] =
-                $this->_new_attribute_path( $params['attribute_path'] );
+        if (isset($params['attributePath'])) {
+            $params['attributePath'] =
+                $this->_newAttributePath($params['attributePath']);
         } else {
-            $params['attribute_path'] = $this->get_attribute_path();
+            $params['attributePath'] = $this->getAttributePath();
         }
 
-        if( ! isset( $params[ 'validation_name' ] ) ) {
-            $params['validation_name'] = $this->get_validation_name();
+        if (!isset($params['validationName'])) {
+            $params['validationName'] = $this->getValidationName();
         }
 
-        if( ! isset( $params[ 'validation_parameters' ] ) ) {
-            $params['validation_parameters'] = $this->get_validation_parameters();
+        if (!isset($params['validationParameters'])) {
+            $params['validationParameters'] = $this->getValidationParameters();
         }
 
-        return new Validation_Error(
+        return new ValidationError(
             $params['value'],
-            $params['attribute_path'],
-            $params['validation_name'],
-            $params['validation_parameters'] 
+            $params['attributePath'],
+            $params['validationName'],
+            $params['validationParameters']
         );
     }
 
-    protected function new_validator()
+    protected function newValidator()
     {
-        $class_name = get_class( $this );
+        $className = get_class($this);
 
-        return new $class_name();
+        return new $className();
     }
 
     /// Creating instances
 
     /**
-     * Creates and returns a new instance of an Attribute_Path initialized with $attribute_path.
+     * Creates and returns a new instance of an AttributePath initialized with $attributePath.
      *
-     * @param string|array|Attribute_Path The initial path.
+     * @param string|array|AttributePath The initial path.
      *
-     * @return Attribute_Path The Attribute_Path created.
+     * @return AttributePath The AttributePath created.
      */
-    protected function _new_attribute_path($attribute_path = [])
+    protected function _newAttributePath($attributePath = [])
     {
-        return new Attribute_Path( $attribute_path );
+        return new AttributePath($attributePath);
     }
 }

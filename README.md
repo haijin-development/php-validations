@@ -9,11 +9,11 @@ Framework to easily validate objects and attributes using a simple and expressiv
 
 **Highlights**
 
-* Zero configuration needed and conventions assumed. 
+* Zero configuration. 
 * Defines complex validation of nested attributes with an expressive DSL in plain PHP.
-* Allows custom validations with closures or callables.
+* Custom validations with classes, closures or callables.
 * Completely separates the validation errors from the validation error messages.
-* Allows to define and see the whole validation for an action at one glance instead of splitting it in different configuration files, models or methods.
+* Allows to define and see the complete validation for a request or object at one glance.
 
 ### Version 2.0.0
 
@@ -27,7 +27,7 @@ If you like it a lot you may contribute by [financing](https://github.com/haijin
     2. [Custom validations](#c-2-2)
     3. [Custom validation with parameters](#c-2-3)
     4. [Custom validations with callables](#c-2-4)
-    5. [Validating array items](#c-2-5)
+    5. [Validating arrays](#c-2-5)
     6. [Halting validations](#c-2-6)
     7. [Custom validator example](#c-2-7)
 3. [Built-in validation constraints](#c-3)
@@ -35,7 +35,7 @@ If you like it a lot you may contribute by [financing](https://github.com/haijin
 5. [Adding and overriding built-in validations and converters](#c-5)
 6. [Integrating the validations in applications](#c-6)
 7. [Validation messages](#c-7)
-    1. [Create a new Validation_Messages_Dictionary](#c-7-1)
+    1. [Create a new ValidationMessagesDictionary](#c-7-1)
     2. [Define a default validation message](#c-7-2)
     3. [Define more specific messages](#c-7-3)
 8. [Running the tests](#c-8)
@@ -72,7 +72,7 @@ Given the object:
 ```php
 $user = [
     'name' => 'Lisa',
-    'last_name' => 'Simpson',
+    'lastName' => 'Simpson',
     'address' => [
         'street' => 'Evergreen',
         'number' => null
@@ -87,77 +87,48 @@ use Haijin\Validations\Validator;
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $user, function($user) {
+$validationErrors = $validator->validate( $user, function($user) {
 
-    $user ->is_present();
+    $user ->isPresent();
 
-    $user->attr('name') ->is_defined() ->is_string();
+    $user->attr('name') ->isDefined() ->isString();
 
-    $user->attr('last_name') ->is_defined() ->is_string();
+    $user->attr('lastName') ->isDefined() ->isString();
 
-    $user->attr('address') ->is_defined() ->is_array() ->eval( function($address) {
+    $user->attr('address') ->isDefined() ->isArray() ->eval( function($address) {
 
-        $address->attr('street') ->is_defined() ->is_string();
+        $address->attr('street') ->isDefined() ->isString();
 
-        $address->attr('number') ->is_defined() ->is_string();
+        $address->attr('number') ->isDefined() ->isString();
 
     });
 
 });
 
 // or get the validation errors with
-$validation_errors = $validator->get_errors();
+$validationErrors = $validator->getErrors();
 ```
-
-Using `[]` to access the validated object attributes also works:
-
-```php
-use Haijin\Validations\Validator;
-
-$validator = new Validator();
-
-$validator->validate( $user, function($user) {
-
-    $user ->is_present();
-
-    $user['name'] ->is_defined() ->is_string();
-
-    $user['last_name'] ->is_defined() ->is_string();
-
-    $user['address'] ->is_defined() ->is_array() ->eval( function($address) {
-
-        $address['street'] ->is_defined() ->is_string();
-
-        $address['number'] ->is_defined() ->is_string();
-
-    });
-
-});
-
-$validation_errors = $validator->get_errors();
-```
-
 
 <a name="c-2-2"></a>
 ### Custom validations
 
-Reuse frequent validations in a Custom_Validator subclass and use it in the object validation:
+Reuse frequent validations in a CustomValidator subclass and use it in the object validation:
 
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\CustomValidator;
 
-class Address_Validator extends Custom_Validator
+class Address_Validator extends CustomValidator
 {
     public function evaluate()
     {
-        $this->is_array();
+        $this->isArray();
 
         $this->attr( 'street', function($street) {
-            $street ->is_defined() ->is_string();
+            $street ->isDefined() ->isString();
         });
 
         $this->attr( 'number', function($number) {
-            $number ->is_defined() ->is_string();
+            $number ->isDefined() ->isString();
         });
     }
 }
@@ -166,7 +137,7 @@ class Address_Validator extends Custom_Validator
 
 $user = [
     'name' => 'Lisa',
-    'last_name' => 'Simpson',
+    'lastName' => 'Simpson',
     'address' => [
         'street' => 'Evergreen',
         'number' => null
@@ -175,15 +146,15 @@ $user = [
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $user, function($user) {
+$validationErrors = $validator->validate( $user, function($user) {
 
-    $user ->is_present();
+    $user ->isPresent();
 
-    $user->attr('name') ->is_defined() ->is_string();
+    $user->attr('name') ->isDefined() ->isString();
 
-    $user->attr('last_name') ->is_defined() ->is_string();
+    $user->attr('lastName') ->isDefined() ->isString();
 
-    $user->attr('address') ->is_defined() ->validate_with( Address_Validator::class );
+    $user->attr('address') ->isDefined() ->validateWith( Address_Validator::class );
 
 });
 ```
@@ -191,27 +162,27 @@ $validation_errors = $validator->validate( $user, function($user) {
 <a name="c-2-3"></a>
 ### Custom validation with parameters
 
-Pass a Custom_Validator instance instead of its name to parametrize it:
+Pass a CustomValidator instance instead of its name to parametrize it:
 
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\CustomValidator;
 
-class Configurable_Address_Validator extends Custom_Validator
+class Configurable_Address_Validator extends CustomValidator
 {
-    public function __construct($max_length = 255)
+    public function __construct($maxLength = 255)
     {
         parent::__construct();
 
-        $this->max_length = $max_length;
+        $this->maxLength = $maxLength;
     }
 
     public function evaluate()
     {
-        $this->is_array();
+        $this->isArray();
 
-        $this->attr('street') ->is_defined() ->is_string() ->length( 0, $this->max_length );
+        $this->attr('street') ->isDefined() ->isString() ->length( 0, $this->maxLength );
 
-        $this->attr('number') ->is_defined() ->is_string() ->length( 0, $this->max_length );
+        $this->attr('number') ->isDefined() ->isString() ->length( 0, $this->maxLength );
     }
 }
 
@@ -219,7 +190,7 @@ class Configurable_Address_Validator extends Custom_Validator
 
 $user = [
     'name' => 'Lisa',
-    'last_name' => 'Simpson',
+    'lastName' => 'Simpson',
     'address' => [
         'street' => 'Evergreen',
         'number' => null
@@ -228,16 +199,16 @@ $user = [
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $user, function($user) {
+$validationErrors = $validator->validate( $user, function($user) {
 
-    $user ->is_present();
+    $user ->isPresent();
 
-    $user->attr('name') ->is_defined() ->is_string();
+    $user->attr('name') ->isDefined() ->isString();
 
-    $user->attr('last_name') ->is_defined() ->is_string();
+    $user->attr('lastName') ->isDefined() ->isString();
 
-    $user->attr('address') ->is_defined()
-            ->validate_with( new Configurable_Address_Validator( 30 ) );
+    $user->attr('address') ->isDefined()
+            ->validateWith( new Configurable_Address_Validator( 30 ) );
 
 });
 ```
@@ -254,16 +225,16 @@ $n = 1;
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $n, function($n) {
+$validationErrors = $validator->validate( $n, function($n) {
 
-    $n ->is_defined() ->is_int();
+    $n ->isDefined() ->isInt();
 
-    $n->validate_with( function($validator) {
+    $n->validateWith( function($validator) {
 
-        $validator->set_validation_name( 'is_odd' );
+        $validator->setValidationName( 'isOdd' );
 
-        if( $this->get_value() % 2 == 0 ){
-            $validator->add_error();            
+        if( $this->getValue() % 2 == 0 ){
+            $validator->addError();            
         }         
 
     });
@@ -272,9 +243,9 @@ $validation_errors = $validator->validate( $n, function($n) {
 ```
 
 <a name="c-2-5"></a>
-### Validating array items
+### Validating arrays
 
-Validate items in arrays with:
+Validate each item in an array with:
 
 ```php
 use Haijin\Validations\Validator;
@@ -283,13 +254,13 @@ $numbers = [ 1, 3, 5, 7 ];
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $numbers, function($numbers) {
+$validationErrors = $validator->validate( $numbers, function($numbers) {
 
-    $numbers ->is_defined() ->is_array();
+    $numbers ->isDefined() ->isArray();
 
     $numbers->each( function($n) {
 
-        $n ->is_defined() ->is_int() ->is( '>', 0 );
+        $n ->isDefined() ->isInt() ->is( '>', 0 );
 
     });
 
@@ -301,9 +272,9 @@ $validation_errors = $validator->validate( $numbers, function($numbers) {
 Some complex validations involve accessing multiple attributes, invoking other validations and performing calculations. In those cases write a custom Validator subclass and use its available protocol.
 
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\CustomValidator;
 
-class A_Custom_Validator extends Custom_Validator
+class A_CustomValidator extends CustomValidator
 {
     public function evaluate()
     {
@@ -311,64 +282,64 @@ class A_Custom_Validator extends Custom_Validator
 
 
         // Define the validation name
-        $this->set_validation_name( 'complex-validation' );
+        $this->setValidationName( 'complex-validation' );
 
         // Get the validation name
-        $this->get_validation_name();
+        $this->getValidationName();
 
         // Define the validation name
-        $this->set_validation_parameters( [ 1, 2, 3 ] );
+        $this->setValidationParameters( [ 1, 2, 3 ] );
 
         // Get the validation parameters
-        $this->get_validation_parameters();
+        $this->getValidationParameters();
 
         // Get the validated value
-        $this->get_value();
+        $this->getValue();
 
         // Get the value of some other attribute
-        $this->get_value_at( 'address.street' );
+        $this->getValueAt( 'address.street' );
 
         // Get the value of some other attribute that is included in an array
-        $this->get_value_at( 'items.[3].description' );
+        $this->getValueAt( 'items.[3].description' );
 
         // Get the attribute path
-        $this->get_attribute_path();
+        $this->getAttributePath();
 
         // Override the attribute path
-        $this->set_attribute_path( 'address.street' );
+        $this->setAttributePath( 'address.street' );
 
         // Get the validation errors previously collected
-        $this->get_errors();
+        $this->getErrors();
 
-        // Add a validation error using the current validation_name and default values
-        $this->add_error();
+        // Add a validation error using the current validationName and default values
+        $this->addError();
 
         // Add a validation error overriding some or all of the default values. Note that is has
         // only para parameters, an associative array, like in the js way.
-        $this->add_error([
+        $this->addError([
             'value' => 'overriden validated value',
-            'attribute_path' => 'overriden.attribute',
-            'validation_name' => 'overriden-validation-name',
-            'validation_parameters' => [ 'overriden', 'validation', 'parameters' ] 
+            'attributePath' => 'overriden.attribute',
+            'validationName' => 'overriden-validation-name',
+            'validationParameters' => [ 'overriden', 'validation', 'parameters' ] 
         ]);
 
         // Add errors collected from another validation
-        $this->add_all_errors( $errors );
+        $this->addAllErrors( $errors );
 
         // Halt validations and do not validate this attribute children
         $this->halt();
 
         // Validate a child attribute
-        $this->attr('address') ->is_present();
+        $this->attr('address') ->isPresent();
 
         // Validate a child attribute with a custom block
-        $this->attr('address') ->is_present() ->eval( function($address) {
-            $address ->is_object();
+        $this->attr('address') ->isPresent() ->eval( function($address) {
+            $address ->isObject();
         });
 
         // This also works
         $this->attr('address', function($address) {
-            $address ->is_present() ->is_object();
+            $address ->isPresent() ->isObject();
         });
     }
 }
@@ -390,32 +361,32 @@ use Haijin\Validations\Validator;
 
 $user = [
     'name' => null,
-    'last_name' => 'Simpson',
+    'lastName' => 'Simpson',
     'address' => null
 ];
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $user, function($user) {
-    $user ->is_defined();
+$validationErrors = $validator->validate( $user, function($user) {
+    $user ->isDefined();
 
     $user->attr( 'name', function($name) {
-        // The is_defined validation fails because name is null and halts. is_string is not called.
-        $name ->is_defined() ->is_string();
+        // The isDefined validation fails because name is null and halts. isString is not called.
+        $name ->isDefined() ->isString();
     });
 
     // These validations are still run
-    $user->attr( 'last_name', function($last_name) {
-        $last_name ->is_defined() ->is_string();
+    $user->attr( 'lastName', function($lastName) {
+        $lastName ->isDefined() ->isString();
     });
 
     $user->attr( 'address', function($address) {
-        // The is_defined validation fails because address is null and halts
-        $address->is_defined();
+        // The isDefined validation fails because address is null and halts
+        $address->isDefined();
 
         // These child validations are not run
-        $address->attr( 'street' ) ->is_defined();
-        $address->attr( 'number' ) ->is_defined();
+        $address->attr( 'street' ) ->isDefined();
+        $address->attr( 'number' ) ->isDefined();
     });
 });
 ```
@@ -423,51 +394,51 @@ $validation_errors = $validator->validate( $user, function($user) {
 <a name="c-2-7"></a>
 ### Custom validator example
 
-This Custom_Validator validates a purchase object:
+This CustomValidator validates a purchase object:
 
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\CustomValidator;
 
-class Purchase_Validator extends Custom_Validator
+class Purchase_Validator extends CustomValidator
 {
     /**
      * Validates a purchase object.
      */
     public function evaluate()
     {
-        $this->attr( 'date' ) ->is_defined();
+        $this->attr( 'date' ) ->isDefined();
 
-        $this->attr( 'items' ) ->is_defined() ->is_array() ->each( function($each_item){
-            $each_item ->is_defined();
+        $this->attr( 'items' ) ->isDefined() ->isArray() ->each( function($eachItem){
+            $eachItem ->isDefined();
 
-            $each_item->attr( 'description' ) ->is_defined() ->is_string();
-            $each_item->attr( 'price' ) ->is_defined() ->is_number() ->is( '>=', 0 );
+            $eachItem->attr( 'description' ) ->isDefined() ->isString();
+            $eachItem->attr( 'price' ) ->isDefined() ->isNumber() ->is( '>=', 0 );
         }) ;
 
-        $this->attr( 'total' ) ->is_defined() ->is_number() ->is( '>=', 0 );
+        $this->attr( 'total' ) ->isDefined() ->isNumber() ->is( '>=', 0 );
 
         // Extracted to a method on its own because of its complexity.
         // Only run this validation if there are no previous errors in the purchase.
-        if( count( $this->get_errors() ) == 0 )
-            $this->validate_total_sum();
+        if( count( $this->getErrors() ) == 0 )
+            $this->validateTotalSum();
     }
 
     /**
      * Validates that the sum of all item prices equals the purchase total.
      */
-    protected function validate_total_sum()
+    protected function validateTotalSum()
     {
-        $this->set_validation_name( 'total-sum' );
+        $this->setValidationName( 'total-sum' );
 
-        $total = $this->get_value_at( 'total' );
+        $total = $this->getValueAt( 'total' );
 
         $sum = 0;
-        foreach( $this->get_value_at( 'items' ) as $item ) {
+        foreach( $this->getValueAt( 'items' ) as $item ) {
             $sum += $item[ 'price' ];
         }
 
         if( $total != $sum ) {
-            $this->add_error();
+            $this->addError();
         }
     }
 }
@@ -492,8 +463,8 @@ $purchase->total = 7.00;
 
 $validator = new Validator();
 
-$validation_errors = $validator->validate( $purchase, function($purchase) {
-    $purchase ->is_defined() ->is_object() ->validate_with( 'Purchase_Validator' );
+$validationErrors = $validator->validate( $purchase, function($purchase) {
+    $purchase ->isDefined() ->isObject() ->validateWith( 'Purchase_Validator' );
 });
 ```
 
@@ -510,23 +481,23 @@ Converters are regular `Validation` objects that besides validating a value they
 ```php
 $validator = new Validator();
 
-$validation_errors = $validator->validate( '1', function($n) {
-    $n ->is_defined() ->is_string() ->as_int() ->is( '>', 0 );
+$validationErrors = $validator->validate( '1', function($n) {
+    $n ->isDefined() ->isString() ->asInt() ->is( '>', 0 );
 });
 ```
 
 Write a custom converter with:
 
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\CustomValidator;
 
-class Increment_Converter extends Custom_Validator
+class Increment_Converter extends CustomValidator
 {
     public function evaluate()
     {
-        $value = $this->get_value();
+        $value = $this->getValue();
 
-        $this->set_value( $value + 1 );
+        $this->setValue( $value + 1 );
     }
 }
 ```
@@ -534,35 +505,35 @@ class Increment_Converter extends Custom_Validator
 <a name="c-5"></a>
 ## Adding and overriding built-in validations and converters
 
-Override and add built in validations defining methods in a Custom_Validator subclass and using that subclass instead of Custom_Validator:
+Override and add built in validations defining methods in a CustomValidator subclass and using that subclass instead of CustomValidator:
  
 ```php
-use Haijin\Validations\Custom_Validator;
+use Haijin\Validations\Validator;
 
-class Extended_Validator extends Custom_Validator
+class ExtendedValidator extends Validator
 {
-    public function is_address()
+    public function isAddress()
     {
         $this->attr( 'street', function($street) {
-            $street ->is_defined() ->is_string();
+            $street ->isDefined() ->isString();
         });
 
         $this->attr( 'number', function($number) {
-            $number ->is_defined() ->is_string();
+            $number ->isDefined() ->isString();
         });
     }
 }
 
-$validator = new Extended_Validator();
+$validator = new ExtendedValidator();
 
-$validation_errors = $validator->validate( $user, function($user) {
-    $user ->is_defined();
+$validationErrors = $validator->validate( $user, function($user) {
+    $user ->isDefined();
 
-    $user->attr( 'name' ) ->is_defined() ->is_string();
+    $user->attr( 'name' ) ->isDefined() ->isString();
 
-    $user->attr( 'last_name' ) ->is_defined() ->is_string();
+    $user->attr( 'lastName' ) ->isDefined() ->isString();
 
-    $user->attr( 'address' ) ->is_address();
+    $user->attr( 'address' ) ->isAddress();
 });
 ```
 
@@ -576,25 +547,25 @@ Integrate the validations like this:
 ```php
 use Haijin\Validations\Validator;
 
-abstract class Persistent_Collection
+abstract class PersistentCollection
 {
     public function save($object)
     {
-        $validation_errors = $this->validate_before_saving( $object );
+        $validationErrors = $this->validateBeforeSaving( $object );
 
-        if( count( $validation_errors ) > 0 ) {
-            return $validation_errors;
+        if( count( $validationErrors ) > 0 ) {
+            return $validationErrors;
         }
 
-        $this->do_save( $object );
+        $this->doSave( $object );
     }
 
-    public function do_save($object)
+    public function doSave($object)
     {
         // actual saving here ...
     }
 
-    protected function validate_before_saving($object)
+    protected function validateBeforeSaving($object)
     {
         $validator = new Validator;
 
@@ -606,16 +577,16 @@ abstract class Persistent_Collection
     abstract protected function validate($validator);
 }
 
-class User_Persistent_Collection extends Persistent_Collection
+class UserPersistentCollection extends PersistentCollection
 {
     protected function validate($user)
     {
         $user->attr( 'name', function($name){
-            $name ->is_defined() ->is_string() ->length( 1, 255 );
+            $name ->isDefined() ->isString() ->length( 1, 255 );
         });
 
-        $user->attr( 'last_name', function($last_name) {
-            $last_name ->is_defined() ->is_string() ->length( 1, 255 );
+        $user->attr( 'lastName', function($lastName) {
+            $lastName ->isDefined() ->isString() ->length( 1, 255 );
         });
 
         // etc ...
@@ -626,38 +597,38 @@ class User_Persistent_Collection extends Persistent_Collection
 
 $user = [
     'name' => 123,
-    'last_name' => null,
+    'lastName' => null,
     'address' => [
         'street' => 'Evergreen',
         'number' => null
     ]
 ];
 
-$persistent_collection = new User_Persistent_Collection();
+$persistentCollection = new UserPersistentCollection();
 
-$validation_errors = $persistent_collection->save( $user );
+$validationErrors = $persistentCollection->save( $user );
 
-var_dump( $validation_errors );
+varDump( $validationErrors );
 ```
 
 <a name="c-7"></a>
 ## Validation messages
 
-The validation message is not part of the Validation_Error object. Validation messages are handled in a definition of their own.
+The validation message is not part of the ValidationError object. Validation messages are handled in a definition of their own.
 
 This allows to conveniently define and override the messages to the end users in any part of the application.
 
 [Code example of defining validation messages](./documentation/validation-message-example.php).
 
 <a name="c-7-1"></a>
-### Create a new Validation_Messages_Dictionary
+### Create a new ValidationMessagesDictionary
 
 Create a new dictionary
 
 ```php
 use Haijin\Validations\Validator;
 
-$validation_messages_dictionary = new Validation_Messages_Dictionary();
+$validationMessagesDictionary = new ValidationMessagesDictionary();
 ```
 
 and optionally add the default messages to it
@@ -665,19 +636,19 @@ and optionally add the default messages to it
 ```php
 use Haijin\Validations\Validator;
 
-$validation_messages_dictionary = new Validation_Messages_Dictionary();
+$validationMessagesDictionary = new ValidationMessagesDictionary();
 
-$validation_messages_dictionary->with_default_messages();
+$validationMessagesDictionary->withDefaultMessages();
 ```
 
 <a name="c-7-2"></a>
 ### Define a default validation message
 
 ```php
-$validation_messages_dictionary->define( function($messages) {
+$validationMessagesDictionary->define( function($messages) {
 
-    $messages->default( function($validation_error) {
-        return "The attribute '{$validation_error->get_attribute_name()}' is not valid.";
+    $messages->default( function($validationError) {
+        return "The attribute '{$validationError->getAttributeName()}' is not valid.";
     });
 
 });
@@ -686,9 +657,9 @@ $validation_messages_dictionary->define( function($messages) {
 Get the validations messages for each validation error:
 
 ```php
-foreach( $validation_errors as $error ) {
+foreach( $validationErrors as $error ) {
 
-    $message = $validation_messages_dictionary->message_for( $error );
+    $message = $validationMessagesDictionary->messageFor( $error );
 
     print( $message );
     print "\n";
@@ -700,16 +671,16 @@ foreach( $validation_errors as $error ) {
 ### Define more specific messages
 
 ```php
-$validation_messages_dictionary->define( function($messages) {
+$validationMessagesDictionary->define( function($messages) {
 
-    $messages->at_validation( 'not_blank', function($validation_error) {
-        return "The attribute '{$validation_error->get_attribute_name()}' must contain visible characters.";
+    $messages->atValidation( 'notBlank', function($validationError) {
+        return "The attribute '{$validationError->getAttributeName()}' must contain visible characters.";
     });
 
-    $messages->at_validation( 'length', function($validation_error) {
-        $params = $validation_error->get_validation_parameters();
+    $messages->atValidation( 'length', function($validationError) {
+        $params = $validationError->getValidationParameters();
 
-        return "The attribute '{$validation_error->get_attribute_name()}' length must be in the range ({$params[0]}, {$params[1]})";
+        return "The attribute '{$validationError->getAttributeName()}' length must be in the range ({$params[0]}, {$params[1]})";
     });
 });
 ```
@@ -717,8 +688,8 @@ $validation_messages_dictionary->define( function($messages) {
 Get the validations messages
 
 ```php
-foreach( $validation_errors as $error ) {
-    print( $errors_dictionary->message_for( $error ) );
+foreach( $validationErrors as $error ) {
+    print( $errorsDictionary->messageFor( $error ) );
     print "\n";
 }
 ```
@@ -727,5 +698,14 @@ foreach( $validation_errors as $error ) {
 ## Running the tests
 
 ```
+composer specs
+```
+
+Or if you want to run the tests using a Docker image with PHP 7.2:
+
+```
+sudo docker run -ti -v $(pwd):/home/php-validations --rm --name php-validations haijin/php-dev:7.2 bash
+cd /home/php-validations/
+composer install
 composer specs
 ```

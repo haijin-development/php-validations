@@ -5,18 +5,18 @@ namespace Haijin\Validations;
 /**
  * This trait has the definitions of the built in converters for the Validator class.
  */
-trait Built_In_Converters
+trait BuiltInConverters
 {
     /**
      * Converts the validated value to a string.
      *
      * @return Validator $this object
      */
-    public function as_string()
+    public function asString()
     {
-        $this->set_validation_name( 'as_string' );
+        $this->setValidationName('asString');
 
-        $this->set_value( (string) $this->get_value() );
+        $this->setValue((string)$this->getValue());
     }
 
     /**
@@ -24,11 +24,11 @@ trait Built_In_Converters
      *
      * @return Validator $this object
      */
-    public function as_int()
+    public function asInt()
     {
-        $this->set_validation_name( 'as_int' );
+        $this->setValidationName('asInt');
 
-        $this->set_value( (int) $this->get_value() );
+        $this->setValue((int)$this->getValue());
 
         return $this;
     }
@@ -38,11 +38,11 @@ trait Built_In_Converters
      *
      * @return Validator $this object
      */
-    public function as_float()
+    public function asFloat()
     {
-        $this->set_validation_name( 'as_float' );
+        $this->setValidationName('asFloat');
 
-        $this->set_value( (float) $this->get_value() );
+        $this->setValue((float)$this->getValue());
 
         return $this;
     }
@@ -52,11 +52,11 @@ trait Built_In_Converters
      *
      * @return Validator $this object
      */
-    public function as_boolean()
+    public function asBoolean()
     {
-        $this->set_validation_name( 'as_boolean' );
+        $this->setValidationName('asBoolean');
 
-        $this->set_value( (bool) $this->get_value() );
+        $this->setValue((bool)$this->getValue());
 
         return $this;
     }
